@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Travel Dashboard</title>
+    <link rel="stylesheet" href="style/base.css">
+</head>
+<body>
+    <!-- profile section -->
+    <div class="profile-container">
+        <h1>User Profile</h1>
+        <div class="profile-info">
+            <img src="images/profile.jpg" alt="Profile Picture" class="profile-picture">
+            <p><strong>Name:</strong> John Travel</p>
+            <p><strong>Email:</strong> john.travel@example.com</p>
+        </div>
+    </div>
+
+    <div class="dashboard-container">
+        <h1>Travel Dashboard</h1>
+        <div class="stat-row">
+            <span class="stat-label">World Traveled Countries</span>
+            <span class="stat-value" id="countries-count">0</span>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Top 
+                 <span>
+                <select id="cities-top">
+                    <option value="10">10</option>
+                    <option value="100">100</option>
+                    <option value="1000">1000</option>
+                </select>
+            </span>
+            Cities by Population</span>
+            <span class="stat-value" id="cities-count">0</span>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Top 
+                <span>
+                    <select id="airports-top">
+                        <option value="10">10</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="200">200</option>
+                    </select>
+                </span>
+                Airports by Passengers</span>
+                <span class="stat-value" id="airports-count">0</span>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Northernmost City</span>
+            <span class="stat-value" id="northernmost-city">-</span>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Easternmost City</span>
+            <span class="stat-value" id="easternmost-city">-</span>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Southernmost City</span>
+            <span class="stat-value" id="southernmost-city">-</span>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Westernmost City</span>
+            <span class="stat-value" id="westernmost-city">-</span>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Northernmost Country</span>
+            <span class="stat-value" id="northernmost-country">-</span>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Easternmost Country</span>
+            <span class="stat-value" id="easternmost-country">-</span>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Southernmost Country</span>
+            <span class="stat-value" id="southernmost-country">-</span>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Westernmost Country</span>
+            <span class="stat-value" id="westernmost-country">-</span>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Public Slovak Castles</span>
+            <span class="stat-value" id="slovak-castles">0</span>
+        </div>
+    </div>
+</body>
+</html>
