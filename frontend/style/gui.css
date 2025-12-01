@@ -57,6 +57,24 @@
     align-self: center;
 }
 
+#suggestions {
+    background: white;
+    border: 1px solid #ccc;
+    border-top: none;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 9999;
+}
+
+.suggestion {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.suggestion:hover {
+    background: #eee;
+}
+
 #buttons-row {
     display: flex;
     justify-content: center;
