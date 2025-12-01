@@ -1,0 +1,64 @@
+#gui-top > div {
+    flex: 1;                   
+    display: flex;
+    justify-content: center;  
+    align-items: center;     
+}
+
+div {
+    border: #28d85a 2px solid; /* debug */
+}
+
+#gui-top > div:first-child {
+    justify-content: flex-start; 
+    align-items: flex-start;    
+    padding: var(--padding); 
+}
+
+#gui-top > div:nth-child(2) {
+    align-items: flex-start;
+    justify-content: center;     
+}
+
+#gui-top > div:last-child {
+    justify-content: flex-end;  
+    align-items: center;         
+    padding: 0 var(--padding);
+}
+
+
+#gui-top {
+    border: #d88328 2px solid;
+    border-radius: var(--border-radius);
+    position: fixed;
+    justify-content: center;
+    display: flex;
+    top: 0;
+    left: 0;
+    width: 100vw;
+}
+
+#gui-bottom {
+    border: #d88328 2px solid;
+    position: fixed;
+    justify-content: center;
+    left: 50%;
+    bottom: 1%;
+    transform: translateX(-50%);
+    width: 100vw;
+    padding: var(--padding);
+    display: flex;  
+}
+
+#searchbox {
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
+    align-self: center;
+}
+
+#buttons-row {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}

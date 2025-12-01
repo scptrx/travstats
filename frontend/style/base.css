@@ -4,6 +4,7 @@
     --font-family: Arial, sans-serif;
     --font-size: 16px;
     --border-radius: 8px;
+    --padding: 10px;
 }
 
 body {
@@ -11,65 +12,13 @@ body {
     font-size: var(--font-size);
     background-color: var(--secondary-color);
     overflow: hidden;
-
-    /* margin: 20px; */
-    /* padding: 20px; */
-}
-
-#gui-top {
-    border: #d88328 2px solid;
-    position: absolute;
-    /* justify-content: center; */
-    display: flex;
-    top: 5;
-    left: 0;
-    width: 100vw;
-    padding: 10px;
-}
-
-#searchbox {
-    display: block;
-    width: fit-content;
-    margin: 0 auto;
-    align-self: center;
-}
-
-#gui-bottom {
-    border: #d88328 2px solid;
-
-    position: absolute;
-    justify-content: center;
-    left: 50%;
-    top: 95%;
-    transform: translate(-50%, -50%);
-    width: 100vw;
-    padding: 10px;
-    display: flex;  
-}
-
-
-#map {
-    position: absolute;
-    border: 1px solid var(--primary-color);
-    border-radius: 24px;
-    width: 100vw;
-    height: 100vh;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    box-sizing: border-box;
-    
-}
-
-#buttons-row {
-
 }
 
 h1 {
     color: var(--primary-color);
     background-color: var(--secondary-color);
     border: #d88328 2px solid;
-    padding: 10px;
+    padding: 0 calc(var(--padding) * 2);
     border-radius: 50px;
     text-align: center;
     width: fit-content;
