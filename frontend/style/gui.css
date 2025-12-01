@@ -5,9 +5,9 @@
     align-items: center;     
 }
 
-div {
-    border: #28d85a 2px solid; /* debug */
-}
+/* div { */
+    /* border: #28d85a 2px solid; debug */
+/* } */
 
 #gui-top > div:first-child {
     justify-content: flex-start; 
@@ -28,8 +28,8 @@ div {
 
 
 #gui-top {
-    border: #d88328 2px solid;
-    border-radius: var(--border-radius);
+    /* border: #d88328 2px solid; */
+    /* border-radius: var(--border-radius); */
     position: fixed;
     justify-content: center;
     display: flex;
@@ -39,7 +39,7 @@ div {
 }
 
 #gui-bottom {
-    border: #d88328 2px solid;
+    /* border: #d88328 2px solid; */
     position: fixed;
     justify-content: center;
     left: 50%;
