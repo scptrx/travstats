@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="/frontend/style/base.css">
+    
+    <title>Register</title>
+</head>
+<body>
+    <main role="main">
+        <h1>Create an account</h1>
+        <p>Sign up to access your travel statistics dashboard.</p>
+
+        <form id="registerForm">
+            <div>
+                <label for="name">Full name</label>
+                <input id="name" name="name" type="text" autocomplete="name" required minlength="2" placeholder="Jane Doe" />
+                <div id="nameHint">Use the name you want shown on your profile.</div>
+            </div>
+
+            <div>
+                <label for="email">Email address</label>
+                <input id="email" name="email" type="email" autocomplete="email" required placeholder="you@example.com" />
+            </div>
+
+            <div>
+                <div>
+                    <label for="password">Password</label>
+                    <input id="password" name="password" type="password" autocomplete="new-password" required minlength="8" placeholder="At least 8 characters" />
+                </div>
+                <div>
+                    <label for="confirm">Confirm password</label>
+                    <input id="confirm" name="confirm" type="password" autocomplete="new-password" required minlength="8" placeholder="Repeat password" />
+                </div>
+            </div>
+
+            <div>
+                <input id="showPassword" type="checkbox" />
+                <label for="showPassword">Show password</label>
+            </div>
+
+            <div id="formError" aria-live="polite" hidden></div>
+
+            <div>
+                <button id="submitBtn" type="submit">Create account</button>
+                <div>Already have an account? <a href="/login">Log in</a></div>
+            </div>
+        </form>
+
+        <div>By creating an account you agree to our <a href="/terms">Terms</a> and <a href="/privacy">Privacy Policy</a>.</div>
+    </main>
+</body>
+</html>

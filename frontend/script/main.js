@@ -1,3 +1,4 @@
 import './map/mapConfig.js';
 import './map/mapLayers.js';
-import './search.js';
+import './map/mapSearch.js';
+import './auth//auth.js'
