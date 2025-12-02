@@ -4,6 +4,7 @@ const blackMapStyle = 'https://api.maptiler.com/maps/019adaf0-84d9-7ddb-801a-02b
 const whiteMapStyle = 'https://api.maptiler.com/maps/019adaf0-d3f6-7618-98a2-99ef9942c4d8/style.json?key=' + MAPTILER_API_KEY;
 const satelliteMapStyle = 'https://api.maptiler.com/maps/019adb04-1d43-78c4-9ab6-9e2070be2ee3/style.json?key=' + MAPTILER_API_KEY;
 
+
 const map = new maplibregl.Map({
     container: 'map',
     style: whiteMapStyle, 
@@ -21,7 +22,6 @@ function setMapStyle(styleURL) {
 document.getElementById('whiteButton').onclick = () => setMapStyle(whiteMapStyle);
 document.getElementById('blackButton').onclick = () => setMapStyle(blackMapStyle);
 document.getElementById('satelliteButton').onclick = () => setMapStyle(satelliteMapStyle);
-
 
 map.dragRotate.disable(); 
 

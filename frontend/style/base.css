@@ -15,7 +15,7 @@ body {
 }
 
 h1 {
-    font-size: smaller;
+    font-size: 1em;
     color: var(--primary-color);
     background-color: var(--secondary-color);
     border: #d88328 2px solid;

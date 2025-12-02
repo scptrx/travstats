@@ -3,11 +3,8 @@
     display: flex;
     justify-content: center;  
     align-items: center;     
+    background-color: rgb(190, 140, 104);
 }
-
-/* div { */
-    /* border: #28d85a 2px solid; debug */
-/* } */
 
 #gui-top > div:first-child {
     justify-content: flex-start; 
@@ -28,8 +25,6 @@
 
 
 #gui-top {
-    /* border: #d88328 2px solid; */
-    /* border-radius: var(--border-radius); */
     position: fixed;
     justify-content: center;
     display: flex;
@@ -39,7 +34,6 @@
 }
 
 #gui-bottom {
-    /* border: #d88328 2px solid; */
     position: fixed;
     justify-content: center;
     left: 50%;
