@@ -2,23 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Travel Dashboard</title>
+    <title>Travel Dashboard - Travstats</title>
     <link rel="stylesheet" href="/frontend/style/base.css">
 </head>
 <body>
-    <!-- profile section -->
     <div class="profile-container">
         <h1>User Profile</h1>
         <div class="profile-info">
-            <img src="images/profile.jpg" alt="Profile Picture" class="profile-picture">
-            <p><strong>Name:</strong> John Travel</p>
+            <!-- <img src="images/profile.jpg" alt="Profile Picture" class="profile-picture"> -->
+            <!-- <button id="edit-profile-button">Edit Profile Picture</button> -->
+            <p><strong>You are not signed in!</strong></p>
             <p><strong>Email:</strong> john.travel@example.com</p>
+            <p><strong>Member Since:</strong> January 40, 2222</p>
+            <button id="change-password-button">Change Password</button>
+            <button id="sign-out-button">Sign Out</button>
         </div>
     </div>
 
     <div class="dashboard-container">
         <h1>Travel Dashboard</h1>
-        <div class="stat-row">
+        <!-- <div class="stat-row">
             <span class="stat-label">World Traveled Countries</span>
             <span class="stat-value" id="countries-count">0</span>
         </div>
@@ -83,6 +86,7 @@
             <span class="stat-label">Public Slovak Castles</span>
             <span class="stat-value" id="slovak-castles">0</span>
         </div>
-    </div>
+    </div> -->
 </body>
+<script type="module" src="/frontend/script/profile/profile.js"></script>
 </html>
