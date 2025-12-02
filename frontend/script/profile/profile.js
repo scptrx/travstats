@@ -9,7 +9,7 @@ async function checkAuth() {
     try {
         const res = await fetch("http://localhost:3000/auth/check", {
             headers: {
-                "Authorization": `Token ${token}`
+                "Authorization": `Bearer ${token}`
             }
         });
 
@@ -41,6 +41,7 @@ async function displayUserProfile() {
     
     profileInfo.innerHTML = `
         <p><strong>Email:</strong> ${user.email}</p>
+        <p><strong>Username:</strong> ${user.user_metadata.username}</p>
         <p><strong>Member Since:</strong> ${memberSince}</p>
         <button id="change-password-button">Change Password</button>
         <button id="sign-out-button">Sign Out</button>
@@ -50,9 +51,8 @@ async function displayUserProfile() {
 }
 
 function signOut() {
-    localStorage.clear(); // <- Лучше удалить всё
+    localStorage.clear();
     window.location.href = "sign-in.html";
 }
 
-// Вызываем когда страница загрузилась
 document.addEventListener("DOMContentLoaded", displayUserProfile);

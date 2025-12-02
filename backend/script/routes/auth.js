@@ -24,11 +24,17 @@ router.post("/login", async (req, res) => {
 
 // POST /auth/register
 router.post("/register", async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, username } = req.body;
 
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
+    options: {
+      data: {
+        username: username,
+        profile_picture: null
+      }
+    }
   });
 
   if (error) {
@@ -40,7 +46,7 @@ router.post("/register", async (req, res) => {
 
 // GET /auth/check
 router.get("/check", async (req, res) => {
-    const token = req.headers.authorization?.replace("Token ", "");
+    const token = req.headers.authorization?.replace("Bearer ", "");
     
     if (!token) {
         return res.status(401).json({ error: "No token" });

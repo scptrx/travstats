@@ -12,15 +12,18 @@
         <form id="signup-form">
 
             <div>
+                <label for="username">Username</label>
+                <input id="username" name="username" type="text" autocomplete="username" required placeholder="your_username" />
+            </div>
+
+            <div>
                 <label for="email">Email address</label>
                 <input id="email" name="email" type="email" autocomplete="email" required placeholder="you@example.com" />
             </div>
 
-            <div>
-                <div>
-                    <label for="password">Password</label>
-                    <input id="password" name="password" type="password" autocomplete="new-password" required minlength="8" placeholder="At least 8 characters" />
-                </div>    
+            <div>                
+                <label for="password">Password</label>
+                <input id="password" name="password" type="password" autocomplete="new-password" required minlength="8" placeholder="At least 8 characters" />
             </div>
 
             <div>
