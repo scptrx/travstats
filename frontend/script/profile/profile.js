@@ -32,23 +32,28 @@ async function checkAuth() {
 async function displayUserProfile() {
     const profileInfo = document.querySelector(".profile-info");
     profileInfo.innerHTML = '<p>Loading...</p>';
-    
+
     const response = await checkAuth();
-    if (!response) return;
-    
-    const { user, profile } = response; 
-    
-    if (!profile) {
+    if (!response) {
+        profileInfo.innerHTML = '<p>Not authenticated. Redirecting...</p>';
+        return;
+    }
+
+    const { user, profile } = response;
+
+    if (!user) {
         profileInfo.innerHTML = '<p>Error loading profile. Please refresh the page.</p>';
         return;
     }
-    
-    const memberSince = new Date(user.created_at).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    });
-    
+
+    const memberSince = user.created_at
+        ? new Date(user.created_at).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        })
+        : 'Unknown';
+
     profileInfo.innerHTML = `
         <img src="${profile.profile_picture_url || '/frontend/assets/img/profile-picture.jpg'}" 
              alt="Avatar" class="avatar" style="width: 100px; height: 100px; border-radius: 50%;">
@@ -63,9 +68,14 @@ async function displayUserProfile() {
 
     const token = localStorage.getItem("accessToken");
 
-    document.getElementById("change-profile-pic-button").addEventListener("click", () => changeProfilePic(token));
-    // document.getElementById("change-password-button").addEventListener("click", changePassword);
-    document.getElementById("sign-out-button").addEventListener("click", signOut);
+    document.getElementById("change-profile-pic-button")
+        .addEventListener("click", async () => await changeProfilePic(token));
+
+    // document.getElementById("change-password-button")
+    //     .addEventListener("click", changePassword);
+
+    document.getElementById("sign-out-button")
+        .addEventListener("click", signOut);
 }
 
 

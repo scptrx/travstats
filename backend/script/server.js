@@ -18,17 +18,17 @@ app.use(requestLogger);
 app.use("/auth", authRouter);
 app.use("/profile", profileRouter);
 
-app.use((err, req, res, next) => {
-    logger.error('Unhandled error:', {
-        error: err.message,
-        stack: err.stack,
-        url: req.url,
-        method: req.method,
-        body: req.body
-    });
+// app.use((err, req, res, next) => {
+//     logger.error('Unhandled error:', {
+//         error: err.message,
+//         stack: err.stack,
+//         url: req.url,
+//         method: req.method,
+//         body: req.body
+//     });
     
-    res.status(500).json({ error: 'Internal server error' });
-});
+    // res.status(500).json({ error: 'Internal server error' });
+// });
 
 // Promise rejections
 process.on('unhandledRejection', (reason) => {
