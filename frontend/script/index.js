@@ -4,7 +4,7 @@ function checkUserStatus() {
     
     if (token) {
         signInDiv.innerHTML = `
-            <button id="profileButton" type="button" onclick="window.location.href='pages/profile.html'">My Profile</button>
+            <button id="user-profile-button" type="button" onclick="window.location.href='pages/profile.html'">My Profile</button>
         `;
     } else {
         return;

@@ -1,3 +1,5 @@
+
+
 async function checkAuth() {
     const token = localStorage.getItem("accessToken");
     
@@ -36,7 +38,7 @@ async function displayUserProfile() {
     const response = await checkAuth();
     if (!response) return;
     
-    const { user, profile } = response; // <- Теперь правильно
+    const { user, profile } = response; 
     
     if (!profile) {
         profileInfo.innerHTML = '<p>Error loading profile. Please refresh the page.</p>';
@@ -55,28 +57,38 @@ async function displayUserProfile() {
         <p><strong>Username:</strong> ${profile.username}</p>
         <p><strong>Email:</strong> ${profile.email}</p>
         <p><strong>Member Since:</strong> ${memberSince}</p>
-        <input type="file" id="avatar-input" accept="image/*">
+        <input type="file" id="profile-pic-input" accept="image/*">
         <button id="change-profile-pic-button">Upload Profile Picture</button>
         <button id="change-password-button">Change Password</button>
         <button id="sign-out-button">Sign Out</button>
     `;
-    
-    // document.getElementById("change-profile-pic-button").addEventListener("click", changeProfilePic);
+
+    const token = localStorage.getItem("accessToken");
+
+    document.getElementById("change-profile-pic-button").addEventListener("click", () => changeProfilePic(token));
     // document.getElementById("change-password-button").addEventListener("click", changePassword);
     document.getElementById("sign-out-button").addEventListener("click", signOut);
 }
 
-// async function changeProfilePic() {
-//     const fileInput = document.getElementById("profile-pic-input");
-//     const file = fileInput.files[0];
-    
-//     if (!file) {
-//         alert("Select a file first!");
-//         return;
-//     }
-    
-//     // TODO: Upload file to storage and get URL
-// }
+
+async function changeProfilePic(token) {
+    const fileInput = document.querySelector("#profile-pic-input");
+    const file = fileInput.files[0];
+
+    const form = new FormData();
+    form.append("file", file);
+
+    await fetch("http://localhost:3000/profile/upload-avatar", {
+        method: "POST",
+        headers: {
+        Authorization: `Bearer ${token}`
+    },
+    body: form
+    });
+    displayUserProfile();
+}   
+
+
 // async function changePassword() {
 // }
 

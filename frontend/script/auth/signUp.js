@@ -15,7 +15,6 @@ document.getElementById("signup-form").addEventListener("submit", async (e) => {
         const data = await res.json();
         
         if (res.ok) {
-            console.log("Registration successful:", data);
             window.location.href = "confirm-email.html";
         } else {
             console.error("Error:", data.error);

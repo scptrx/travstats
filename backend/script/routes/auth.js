@@ -1,5 +1,6 @@
 import express from "express";
 import { supabase } from "../supabase.js";
+import logger from "../utils/logger.js";
 const router = express.Router();
 
 async function getOrCreateProfile(userId, userEmail, username = null) {
@@ -23,6 +24,7 @@ async function getOrCreateProfile(userId, userEmail, username = null) {
         
         profile = newProfile;
     }
+    logger.info("User profile fetched/created", { userId, profile });  
     
     return profile;
 }
@@ -46,6 +48,7 @@ router.post("/register", async (req, res) => {
     res.json({ 
         user: data.user 
     });
+    logger.info("User registered", { userId: data.user.id, email: data.user.email });
 });
 
 // POST /auth/login
@@ -67,6 +70,7 @@ router.post("/login", async (req, res) => {
         data.user.user_metadata?.username
     );
     
+    logger.info("User logged in", { userId: data.user.id, email: data.user.email });
     res.json({ 
         user: data.user,
         session: data.session,
@@ -94,6 +98,7 @@ router.get("/check", async (req, res) => {
         user.user_metadata?.username
     );
     
+    logger.info("User checked", { userId: user.id, email: user.email });
     res.json({ user, profile });
 });
 

@@ -17,7 +17,6 @@ document.getElementById("signin-form").addEventListener("submit", async (e) => {
             localStorage.setItem("accessToken", data.session.access_token);
             localStorage.setItem("refreshToken", data.session.refresh_token);
             localStorage.setItem("user", JSON.stringify(data.user));
-            // localStorage.setItem("profile", JSON.stringify(data.profile)); 
             window.location.href = "profile.html";
         }   
 
