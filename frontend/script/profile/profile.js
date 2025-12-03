@@ -1,5 +1,3 @@
-
-
 async function checkAuth() {
     const token = localStorage.getItem("accessToken");
     
