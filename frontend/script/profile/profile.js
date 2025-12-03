@@ -62,6 +62,7 @@ async function displayUserProfile() {
         <p><strong>Member Since:</strong> ${memberSince}</p>
         <input type="file" id="profile-pic-input" accept="image/*">
         <button id="change-profile-pic-button">Upload Profile Picture</button>
+        <button id="change-username-button">Change Username</button>
         <button id="change-password-button">Change Password</button>
         <button id="sign-out-button">Sign Out</button>
     `;
@@ -73,6 +74,9 @@ async function displayUserProfile() {
 
     // document.getElementById("change-password-button")
     //     .addEventListener("click", changePassword);
+
+    // document.getElementById("change-username-button")
+    //     .addEventListener("click", changeUsername);
 
     document.getElementById("sign-out-button")
         .addEventListener("click", signOut);
@@ -97,6 +101,11 @@ async function changeProfilePic(token) {
 }   
 
 
+// async function changeUsername() {
+//     const newUsername = prompt("Enter your new username:");
+//     if (!newUsername) return;
+// }
+
 // async function changePassword() {
 // }
 
@@ -105,6 +114,5 @@ function signOut() {
     localStorage.clear();
     window.location.href = "sign-in.html";
 }
-
 
 document.addEventListener("DOMContentLoaded", displayUserProfile);
