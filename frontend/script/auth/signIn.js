@@ -1,3 +1,7 @@
+if (localStorage.getItem("accessToken")) {
+    window.location.href = "profile.html";
+}
+
 document.getElementById("signin-form").addEventListener("submit", async (e) => {
     e.preventDefault();
     

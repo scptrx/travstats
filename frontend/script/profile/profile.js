@@ -1,3 +1,5 @@
+import { loadVisitedCountries } from "../map/visitManager.js";
+
 async function checkAuth() {
     const token = localStorage.getItem("accessToken");
     
@@ -116,3 +118,8 @@ function signOut() {
 }
 
 document.addEventListener("DOMContentLoaded", displayUserProfile);
+
+loadVisitedCountries().then(visits => {
+    const countriesCountElem = document.getElementById("countries-count");
+    countriesCountElem.textContent = visits.length;
+});
