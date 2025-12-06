@@ -1,5 +1,5 @@
-import { map, whiteMapStyle, blackMapStyle, satelliteMapStyle } from './mapConfig.js';
-import { addCountryVisit, loadVisitedCountries } from './visitManager.js'; // ← Импорт
+import { map, whiteMapStyle, blackMapStyle } from './mapConfig.js';
+import { addCountryVisit, loadVisitedCountries } from './visitManager.js'; 
 
 map.on('load', () => {
     addCountryLayers();
@@ -16,7 +16,6 @@ export function setMapStyle(styleURL) {
 
 document.getElementById('whiteButton').onclick = () => setMapStyle(whiteMapStyle);
 document.getElementById('blackButton').onclick = () => setMapStyle(blackMapStyle);
-document.getElementById('satelliteButton').onclick = () => setMapStyle(satelliteMapStyle);
 
 async function loadAndHighlightVisitedCountries() {
     const visits = await loadVisitedCountries();
@@ -38,45 +37,8 @@ export function addCountryLayers() {
     if (!map.getSource('countries')) {
         map.addSource('countries', {
             type: 'geojson',
-            data: 'assets/geodata/countries_50.geojson'
-        });
-    }
-    
-    if (!map.getLayer('countries-border')) {
-        map.addLayer({
-            id: 'countries-border',
-            type: 'line',
-            source: 'countries',
-            paint: {
-                'line-color': '#ff8f1eff',
-                'line-width': 1
-            }
-        });
-    }
-    
-    if (!map.getLayer('hover-border')) {
-        map.addLayer({
-            id: 'hover-border',
-            type: 'line',
-            source: 'countries',
-            paint: {
-                'line-color': '#ff8f1eff',
-                'line-width': 3
-            },
-            filter: ['==', 'adm0_a3', '']
-        });
-    }
-    
-    if (!map.getLayer('highlight-country')) {
-        map.addLayer({
-            id: 'highlight-country',
-            type: 'fill',
-            source: 'countries',
-            paint: {
-                'fill-color': '#ffc170ff',
-                'fill-opacity': 0.6
-            },
-            filter: ['==', 'adm0_a3', '']
+            data: 'assets/geodata/countries_50.geojson',
+            generateId: true
         });
     }
     
@@ -86,32 +48,107 @@ export function addCountryLayers() {
             type: 'fill',
             source: 'countries',
             paint: {
-                'fill-color': '#ffc170ff',
+                'fill-color': '#ffc170',
                 'fill-opacity': 0.2
             }
         });
     }
-    
-    
+
+    if (!map.getLayer('highlight-country')) {
+        map.addLayer({
+            id: 'highlight-country',
+            type: 'fill',
+            source: 'countries',
+            paint: {
+                'fill-color': '#4CAF50', // зеленый для посещенных
+                'fill-opacity': 0.6
+            },
+            filter: ['in', 'adm0_a3', ''] // начальный пустой фильтр
+        });
+    }
+
+    if (!map.getLayer('countries-hover')) {
+        map.addLayer({
+            id: 'countries-hover',
+            type: 'fill',
+            source: 'countries',
+            paint: {
+                'fill-color': '#ff8f1e',
+                'fill-opacity': [
+                    'case',
+                    ['boolean', ['feature-state', 'hover'], false],
+                    0.6,
+                    0
+                ]
+            }
+        });
+    }
+
+    if (!map.getLayer('countries-outline')) {
+        map.addLayer({
+            id: 'countries-outline',
+            type: 'line',
+            source: 'countries',
+            paint: {
+                'line-color': '#333',
+                'line-width': 1
+            }
+        });
+    }
+
     if (!map.hoverHandlerAdded) {
-        map.on('mousemove', 'countries-fill', (e) => {
+        let hoveredId = null;
+
+        map.on('mousemove', 'countries-hover', (e) => {
+            map.getCanvas().style.cursor = 'pointer';
+            
             if (!e.features || !e.features.length) {
-                map.setFilter('hover-border', ['==', 'adm0_a3', '']);
+                if (hoveredId !== null) {
+                    map.setFeatureState(
+                        { source: 'countries', id: hoveredId },
+                        { hover: false }
+                    );
+                    hoveredId = null;
+                }
                 return;
             }
-            const code = e.features[0].properties.adm0_a3;
-            map.setFilter('hover-border', ['==', 'adm0_a3', code]);
+
+            const id = e.features[0].id;
+
+            if (id !== hoveredId) {
+                if (hoveredId !== null) {
+                    map.setFeatureState(
+                        { source: 'countries', id: hoveredId },
+                        { hover: false }
+                    );
+                }
+
+                map.setFeatureState(
+                    { source: 'countries', id },
+                    { hover: true }
+                );
+
+                hoveredId = id;
+            }
         });
-        
-        map.on('mouseleave', 'countries-fill', () => {
-            map.setFilter('hover-border', ['==', 'adm0_a3', '']);
+
+        map.on('mouseleave', 'countries-hover', () => {
+            map.getCanvas().style.cursor = '';
+            
+            if (hoveredId !== null) {
+                map.setFeatureState(
+                    { source: 'countries', id: hoveredId },
+                    { hover: false }
+                );
+                hoveredId = null;
+            }
         });
-        
+
         map.hoverHandlerAdded = true;
     }
-    
+
     if (!map.clickHandlerAdded) {
-        map.on('click', 'countries-fill', async (e) => {
+        map.on('click', 'countries-hover', async (e) => {
             if (!e.features || !e.features.length) return;
 
             const props = e.features[0].properties;
@@ -130,7 +167,6 @@ export function addCountryLayers() {
                 alert(`${name} added to your travels!`);
             }
         });
-        loadAndHighlightVisitedCountries();
 
         map.clickHandlerAdded = true;
     }
