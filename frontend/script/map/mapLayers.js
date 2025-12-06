@@ -60,10 +60,10 @@ export function addCountryLayers() {
             type: 'fill',
             source: 'countries',
             paint: {
-                'fill-color': '#4CAF50', // зеленый для посещенных
+                'fill-color': '#4CAF50', 
                 'fill-opacity': 0.6
             },
-            filter: ['in', 'adm0_a3', ''] // начальный пустой фильтр
+            filter: ['in', 'adm0_a3', ''] 
         });
     }
 
