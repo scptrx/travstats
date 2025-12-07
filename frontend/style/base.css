@@ -1,27 +1,227 @@
 :root {
-    --primary-color: #d88328;
-    --secondary-color: #f0f0f0;
-    --font-family: Arial, sans-serif;
-    --font-size: 16px;
-    --border-radius: 8px;
-    --padding: 10px;
+  --primary-color: #d88328;
+  --primary-dark: #b86d1f;
+  --secondary-color: #f0f0f0;
+  --glass-bg: rgba(255, 255, 255, 0.95);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --glass-shadow-hover: 0 12px 48px rgba(0, 0, 0, 0.15);
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  --font-size: 16px;
+  --border-radius: 16px;
+  --padding: 12px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: var(--font-family);
-    font-size: var(--font-size);
-    background-color: var(--secondary-color);
-    overflow: hidden;
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem;
+  position: relative;
+  overflow: auto;
 }
 
 h1 {
-    font-size: 1em;
-    color: var(--primary-color);
-    background-color: var(--secondary-color);
-    border: #d88328 2px solid;
-    padding: 0 calc(var(--padding) * 2);
-    border-radius: 50px;
-    text-align: center;
-    width: fit-content;
+  font-size: 1.5rem;
+  font-weight: 700;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  -webkit-background-clip: text;
+  padding: 0.75rem 1.5rem;
+  border-radius: 50px;
+  border: var(--primary-color) 2px solid;
+  text-align: center;
+  width: fit-content;
+  box-shadow: var(--glass-shadow);
+  transition: var(--transition);
+  background-clip: text;
+  position: relative;
 }
 
+h1::before {
+  -webkit-text-fill-color: var(--primary-color);
+  margin-right: 0.25rem;
+}
+
+h1:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--glass-shadow-hover);
+}
+
+/* Контейнер формы */
+form {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 2.5rem;
+  border-radius: 24px;
+  box-shadow: var(--glass-shadow);
+  width: 100%;
+  max-width: 420px;
+  animation: slideUp 0.5s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+body > h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  animation: fadeIn 0.5s ease;
+}
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Описание под заголовком */
+body > p {
+  text-align: center;
+  color: white;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.5s ease 0.1s both;
+}
+
+/* Группы полей формы */
+form > div {
+  margin-bottom: 1.5rem;
+}
+
+form > div:last-child {
+  margin-bottom: 0;
+  margin-top: 2rem;
+}
+
+/* Labels */
+label {
+  display: block;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+/* Inputs */
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 0.875rem 1.25rem;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  font-size: 1rem;
+  font-family: var(--font-family);
+  transition: var(--transition);
+  background: white;
+  color: #333;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(216, 131, 40, 0.1);
+}
+
+input::placeholder {
+  color: #999;
+}
+
+/* Кнопки в формах */
+form button[type="submit"],
+form button[type="button"],
+body > button {
+  width: 100%;
+  padding: 1rem;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: var(--font-family);
+  box-shadow: 0 4px 12px rgba(216, 131, 40, 0.3);
+}
+
+form button[type="submit"]:hover,
+form button[type="button"]:hover,
+body > button:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(216, 131, 40, 0.4);
+}
+
+form button[type="submit"]:active,
+form button[type="button"]:active,
+body > button:active {
+  transform: translateY(0);
+}
+
+form > div > div,
+body > p:last-of-type {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+body > p:last-of-type {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  box-shadow: var(--glass-shadow);
+  animation: fadeIn 0.5s ease 0.3s both;
+  color: #333;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+a:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}

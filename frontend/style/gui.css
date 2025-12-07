@@ -1,76 +1,166 @@
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#gui-top {
+  position: fixed;
+  display: flex;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  padding: 1rem;
+  gap: 1rem;
+  z-index: 1000;
+  pointer-events: none;
+  animation: slideDown 0.5s ease;
+}
+
 #gui-top > div {
-    flex: 1;                   
-    display: flex;
-    justify-content: center;  
-    align-items: center;     
-    background-color: rgb(190, 140, 104);
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  pointer-events: auto;
 }
 
 #gui-top > div:first-child {
-    justify-content: flex-start; 
-    align-items: flex-start;    
-    padding: var(--padding); 
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 0;
 }
 
 #gui-top > div:nth-child(2) {
-    align-items: flex-start;
-    justify-content: center;     
+  align-items: flex-start;
+  justify-content: center;
+  max-width: 600px;
 }
 
 #gui-top > div:last-child {
-    justify-content: flex-end;  
-    align-items: center;         
-    padding: 0 var(--padding);
-}
-
-
-#gui-top {
-    position: fixed;
-    justify-content: center;
-    display: flex;
-    top: 0;
-    left: 0;
-    width: 100vw;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0;
 }
 
 #gui-bottom {
-    position: fixed;
-    justify-content: center;
-    left: 50%;
-    bottom: 1%;
-    transform: translateX(-50%);
-    width: 100vw;
-    padding: var(--padding);
-    display: flex;  
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto;
+  max-width: calc(100vw - 2rem);
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 1000;
+  animation: slideUp 0.5s ease 0.4s both;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
 }
 
 #searchbox {
-    display: block;
-    width: fit-content;
-    margin: 0 auto;
-    align-self: center;
+  display: block;
+  width: 100%;
+  max-width: 500px;
+  margin: 0;
+  position: relative;
 }
 
-#suggestions {
-    background: white;
-    border: 1px solid #ccc;
-    border-top: none;
-    max-height: 200px;
-    overflow-y: auto;
-    z-index: 9999;
+#searchInput {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  outline: none;
+  border-radius: 50px;
+  font-size: 0.95rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: var(--glass-shadow);
+  transition: var(--transition);
+  color: #333;
 }
 
-.suggestion {
-    padding: 8px;
-    cursor: pointer;
+#searchInput::placeholder {
+  color: #999;
 }
 
-.suggestion:hover {
-    background: #eee;
+#searchInput:focus {
+  box-shadow: var(--glass-shadow-hover);
+  transform: translateY(-2px);
 }
 
 #buttons-row {
-    display: flex;
-    justify-content: center;
-    gap: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 0.75rem;
+  border-radius: 50px;
+  box-shadow: var(--glass-shadow);
+  flex-wrap: wrap;
+}
+
+button {
+  background: transparent;
+  border: 2px solid transparent;
+  padding: 0.25rem 0.5rem;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  color: #333;
+  white-space: nowrap;
+  font-family: var(--font-family);
+}
+
+button:hover {
+  background: rgba(216, 131, 40, 0.1);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+#user-profile-button {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  box-shadow: var(--glass-shadow);
+  padding: 0.75rem 1.5rem;
+}
+
+#user-profile-button:hover {
+  background: var(--primary-dark);
+  box-shadow: var(--glass-shadow-hover);
+  color: white;
+}
+
+button.active {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
 }

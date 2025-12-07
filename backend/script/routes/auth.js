@@ -1,105 +1,15 @@
 import express from "express";
-import { supabase } from "../supabase.js";
-import logger from "../utils/logger.js";
+import AuthController from "../controllers/authController.js";
+
 const router = express.Router();
 
-async function getOrCreateProfile(userId, userEmail, username = null) {
-    let { data: profile, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .single();
-    
-    if (error || !profile) {
-        const { data: newProfile } = await supabase
-            .from('profiles')
-            .insert({
-                id: userId,
-                username: username || userEmail.split('@')[0],
-                email: userEmail,
-                profile_picture_url: null
-            })
-            .select()
-            .single();
-        
-        profile = newProfile;
-    }
-    logger.info("User profile fetched/created", { userId, profile });  
-    
-    return profile;
-}
-
 // POST /auth/register
-router.post("/register", async (req, res) => {
-    const { email, password, username } = req.body;
-    
-    const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-            data: { username }
-        }
-    });
-    
-    if (error) {
-        return res.status(400).json({ error: error.message });
-    }
-    
-    res.json({ 
-        user: data.user 
-    });
-    logger.info("User registered", { userId: data.user.id, email: data.user.email });
-});
+router.post("/register", AuthController.register);
 
 // POST /auth/login
-router.post("/login", async (req, res) => {
-    const { email, password } = req.body;
-    
-    const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-    });
-    
-    if (error) {
-        return res.status(400).json({ error: error.message });
-    }
-    
-    const profile = await getOrCreateProfile(
-        data.user.id, 
-        data.user.email,
-        data.user.user_metadata?.username
-    );
-    
-    logger.info("User logged in", { userId: data.user.id, email: data.user.email });
-    res.json({ 
-        user: data.user,
-        session: data.session,
-        profile
-    });
-});
+router.post("/login", AuthController.login);
 
 // GET /auth/check
-router.get("/check", async (req, res) => {
-    const token = req.headers.authorization?.replace("Bearer ", "");
-    
-    if (!token) {
-        return res.status(401).json({ error: "No token" });
-    }
-    
-    const { data: { user }, error } = await supabase.auth.getUser(token);
-    
-    if (error) {
-        return res.status(401).json({ error: error.message });
-    }
-    
-    const profile = await getOrCreateProfile(
-        user.id, 
-        user.email,
-        user.user_metadata?.username
-    );
-    
-    logger.info("User checked", { userId: user.id, email: user.email });
-    res.json({ user, profile });
-});
+router.get("/check", AuthController.check);
 
 export default router;

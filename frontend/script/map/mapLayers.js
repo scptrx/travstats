@@ -14,8 +14,8 @@ export function setMapStyle(styleURL) {
     });
 }
 
-document.getElementById('whiteButton').onclick = () => setMapStyle(whiteMapStyle);
-document.getElementById('blackButton').onclick = () => setMapStyle(blackMapStyle);
+// document.getElementById('whiteButton').onclick = () => setMapStyle(whiteMapStyle);
+// document.getElementById('blackButton').onclick = () => setMapStyle(blackMapStyle);
 
 async function loadAndHighlightVisitedCountries() {
     const visits = await loadVisitedCountries();
