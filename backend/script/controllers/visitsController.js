@@ -108,6 +108,34 @@ class VisitsController {
         }
     }
 
+    static async updateVisit(req, res) {
+        try {
+            const token = req.headers.authorization?.replace("Bearer ", "");
+            const { id } = req.params;
+            const { visit_date, notes } = req.body;
+
+            if (!token) {
+                return res.status(401).json({ error: "No token" });
+            }
+
+            const user = await User.getUserByToken(token);
+
+            const updatedVisit = await Visit.update(id, user.id, {
+                visit_date,
+                notes
+            });
+
+            logger.info("Visit updated", { 
+                user_id: user.id, 
+                visit_id: id 
+            });
+
+            res.json({ visit: updatedVisit });
+        } catch (error) {
+            res.status(400).json({ error: error.message });
+        }
+    }
+
     static async deleteVisit(req, res) {
         try {
             const token = req.headers.authorization?.replace("Bearer ", "");

@@ -1,5 +1,8 @@
-import { map, whiteMapStyle, blackMapStyle } from './mapConfig.js';
-import { addCountryVisit, loadVisitedCountries } from './visitManager.js'; 
+import { map } from './mapConfig.js';
+import { loadVisitedCountries } from './visitManager.js';
+import { openCountryPanel } from './countryPanel.js';
+
+let visitedCountriesCache = [];
 
 map.on('load', () => {
     addCountryLayers();
@@ -14,14 +17,11 @@ export function setMapStyle(styleURL) {
     });
 }
 
-// document.getElementById('whiteButton').onclick = () => setMapStyle(whiteMapStyle);
-// document.getElementById('blackButton').onclick = () => setMapStyle(blackMapStyle);
-
 async function loadAndHighlightVisitedCountries() {
-    const visits = await loadVisitedCountries();
+    visitedCountriesCache = await loadVisitedCountries();
     
-    if (visits.length > 0) {
-        const visitedIsoCodes = visits.map(v => v.countries.iso_code);
+    if (visitedCountriesCache.length > 0) {
+        const visitedIsoCodes = visitedCountriesCache.map(v => v.countries.iso_code);
         
         map.setFilter('highlight-country', [
             'in', 
@@ -29,7 +29,10 @@ async function loadAndHighlightVisitedCountries() {
             ...visitedIsoCodes
         ]);
         
-        console.log(`Loaded ${visits.length} visited countries`);
+        console.log(`Loaded ${visitedCountriesCache.length} visited countries`);
+    } else {
+        // Если нет посещенных стран, сбрасываем фильтр
+        map.setFilter('highlight-country', ['in', 'adm0_a3', '']);
     }
 }
 
@@ -156,16 +159,25 @@ export function addCountryLayers() {
             const name = props.name;
 
             console.log("CLICKED:", name, code);
-        
-            const visit = await addCountryVisit(
-                code,
-                { name: name, region: props.continent || null }
+            
+            // Проверяем, посещена ли страна
+            const existingVisit = visitedCountriesCache.find(
+                v => v.countries.iso_code === code
             );
-        
-            if (visit) {
-                loadAndHighlightVisitedCountries();
-                alert(`${name} added to your travels!`);
-            }
+            
+            // Открываем боковую панель
+            openCountryPanel(
+                {
+                    name: name,
+                    code: code,
+                    region: props.continent || null
+                },
+                existingVisit,
+                // Callback для обновления карты после изменений
+                () => {
+                    loadAndHighlightVisitedCountries();
+                }
+            );
         });
 
         map.clickHandlerAdded = true;

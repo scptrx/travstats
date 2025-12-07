@@ -38,6 +38,19 @@ export const validateAddVisit = [
   handleValidationErrors
 ];
 
+export const validateUpdateVisit = [
+  param('id')
+    .isInt({ gt: 0 }).withMessage('Visit ID must be a positive integer'),
+  body('visit_date')
+    .optional()
+    .isISO8601().withMessage('Visit date must be a valid date'),
+  body('notes')
+    .optional()
+    .isString().withMessage('Notes must be a string')
+    .isLength({ max: 500 }).withMessage('Notes cannot exceed 500 characters'),
+  handleValidationErrors
+];
+
 export const validateDeleteVisit = [
   param('id')
     .isInt({ gt: 0 }).withMessage('Visit ID must be a positive integer'),

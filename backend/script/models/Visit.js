@@ -2,7 +2,7 @@ import { supabase } from "../supabase.js";
 
 class Visit {
     /**
-     * Создать визит страны
+     * Create a new visit
      */
     static async create(userId, countryId, visitDate, notes) {
         const { data, error } = await supabase
@@ -23,8 +23,27 @@ class Visit {
         return data;
     }
 
+    static async update(visitId, userId, { visit_date, notes }) {
+        const { data, error } = await supabase
+            .from('visits')
+            .update({
+                visit_date,
+                notes
+            })
+            .eq('id', visitId)
+            .eq('user_id', userId)
+            .select()
+            .single();
+
+        if (error) {
+            throw new Error(error.message);
+        }
+
+        return data;
+    }
+
     /**
-     * Проверить существование визита
+     * Check if a visit exists
      */
     static async checkExists(userId, countryId) {
         const { data } = await supabase
@@ -40,7 +59,7 @@ class Visit {
     }
 
     /**
-     * Удалить визит
+     * Delete a visit
      */
     static async delete(visitId, userId) {
         const { error } = await supabase
@@ -57,7 +76,7 @@ class Visit {
     }
 
     /**
-     * Получить все визиты пользователя
+     * Get all visits of a user
      */
     static async getUserVisits(userId) {
         const { data, error } = await supabase

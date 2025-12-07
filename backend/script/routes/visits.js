@@ -13,6 +13,9 @@ router.post("/add-subdivision", validateAddSubdivision, VisitsController.addSubd
 // DELETE /visits/:id
 router.delete("/:id", validateDeleteVisit, VisitsController.deleteVisit);
 
+// PUT /visits/:id
+router.put("/:id", VisitsController.updateVisit);
+
 // GET /visits/my
 router.get("/my", VisitsController.getMyVisits);
 

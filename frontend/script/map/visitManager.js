@@ -1,7 +1,5 @@
-
-export async function addCountryVisit(countryIsoCode, countryData) {
+export async function addCountryVisit(countryIsoCode, countryData, visitDate) {
     const token = localStorage.getItem("accessToken");
-    
     if (!token) {
         alert("Please sign in to save your travels!");
         window.location.href = "pages/sign-in.html";
@@ -19,7 +17,7 @@ export async function addCountryVisit(countryIsoCode, countryData) {
                 country_iso_code: countryIsoCode,
                 country_name: countryData.name,           
                 country_region: countryData.region,       
-                visit_date: new Date().toISOString().split('T')[0],
+                visit_date: visitDate || new Date().toISOString().split('T')[0],
                 notes: `Visited ${countryData.name}`
             })
         });
@@ -31,7 +29,6 @@ export async function addCountryVisit(countryIsoCode, countryData) {
             return data.visit;
         } else if (res.status === 409) {
             console.log("Already visited:", countryData.name);
-            alert(`You've already marked ${countryData.name} as visited!`);
             return null;
         } else {
             console.error("Error:", data.error);
@@ -45,9 +42,75 @@ export async function addCountryVisit(countryIsoCode, countryData) {
     }
 }
 
+export async function updateCountryVisit(visitId, visitDate) {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+        alert("Please sign in!");
+        return false;
+    }
+    
+    try {
+        const res = await fetch(`http://localhost:3000/visits/${visitId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                visit_date: visitDate
+            })
+        });
+        
+        const data = await res.json();
+        
+        if (res.ok) {
+            console.log("Visit updated");
+            return true;
+        } else {
+            console.error("Error:", data.error);
+            alert(`Failed to update visit: ${data.error}`);
+            return false;
+        }
+    } catch (error) {
+        console.error("Request error:", error);
+        alert("Failed to connect to server");
+        return false;
+    }
+}
+
+export async function deleteCountryVisit(visitId) {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+        alert("Please sign in!");
+        return false;
+    }
+    
+    try {
+        const res = await fetch(`http://localhost:3000/visits/${visitId}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+        
+        if (res.ok) {
+            console.log("Visit deleted");
+            return true;
+        } else {
+            const data = await res.json();
+            console.error("Error:", data.error);
+            alert(`Failed to delete visit: ${data.error}`);
+            return false;
+        }
+    } catch (error) {
+        console.error("Request error:", error);
+        alert("Failed to connect to server");
+        return false;
+    }
+}
+
 export async function loadVisitedCountries() {
     const token = localStorage.getItem("accessToken");
-    
     if (!token) {
         return [];
     }
