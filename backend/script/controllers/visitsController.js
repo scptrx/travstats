@@ -56,6 +56,58 @@ class VisitsController {
         }
     }
 
+    static async addSubdivision(req, res) {
+        try {
+            const token = req.headers.authorization?.replace("Bearer ", "");
+            const {
+                subdivision_iso_code,
+                subdivision_name,
+                country_id,
+                subdivision_latitude,
+                subdivision_longitude,
+                visit_date,
+                notes
+            } = req.body;
+
+            if (!token) {
+                return res.status(401).json({ error: "No token" });
+            }
+
+            const user = await User.getUserByToken(token);
+
+            const subdivision = await Subdivision.getOrCreate(subdivision_iso_code, {
+                name: subdivision_name,
+                country_id: country_id,
+                latitude: subdivision_latitude,
+                longitude: subdivision_longitude
+            });
+
+            const existingVisit = await Visit.checkExists(user.id, subdivision.id);
+
+            if (existingVisit) {
+                return res.status(409).json({
+                    error: "Subdivision already visited",
+                    visit_id: existingVisit.id
+                });
+            }
+
+            const visit = await Visit.create(user.id, subdivision.id, visit_date, notes);
+
+            logger.info("Subdivision visit added", {
+                user_id: user.id,
+                subdivision_iso: subdivision_iso_code,
+                subdivision_name: subdivision_name
+            });
+
+            res.json({ visit });
+        } catch (error) {
+            logger.error("Failed to add subdivision visit", { 
+                error: error.message 
+            });
+            res.status(400).json({ error: error.message });
+        }
+    }
+
     static async deleteVisit(req, res) {
         try {
             const token = req.headers.authorization?.replace("Bearer ", "");

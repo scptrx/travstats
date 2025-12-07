@@ -1,7 +1,6 @@
 import { supabase } from "../supabase.js";
 
 class Profile {
-
     static async getOrCreate(userId, userEmail, username = null) {
         let { data: profile, error } = await supabase
             .from('profiles')
