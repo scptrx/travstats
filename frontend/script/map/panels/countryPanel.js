@@ -1,7 +1,6 @@
-import { addCountryVisit, updateCountryVisit, deleteCountryVisit } from "./visitManager.js";
-import { clearSelectedCountry } from "./layers/countryLayers.js";
-import { renderSubdivisionLayers } from "./layers/subdivisionLayers.js";
-import { openSubdivisionPanel } from "./subdivisionPanel.js";
+import { addCountryVisit, updateVisit, deleteVisit } from "../visitManager.js";
+import { clearSelectedCountry } from "../layers/countryLayers.js";
+import { renderSubdivisionLayers } from "../layers/subdivisionLayers.js";
 
 const panel = document.getElementById("country-panel");
 const countryNameEl = document.getElementById("country-name");
@@ -44,6 +43,9 @@ export function openCountryPanel(countryData, existingVisit, onUpdate) {
     countryRegionEl.textContent = countryData.region || "Unknown region";
 
     const isVisited = !!existingVisit;
+    console.log("existingVisit:", existingVisit);
+    console.log("countryData:", countryData);
+    console.log("isVisited:", isVisited);
 
     if (isVisited) {
         visitDateInput.value = existingVisit.visit_date.split("T")[0];
@@ -124,7 +126,7 @@ updateBtn.addEventListener("click", async () => {
     updateBtn.disabled = true;
     updateBtn.textContent = "Updating...";
 
-    const success = await updateCountryVisit(currentExistingVisit.id, newDate);
+    const success = await updateVisit(currentExistingVisit.id, newDate);
 
     if (success) {
         closeCountryPanel();
@@ -144,7 +146,7 @@ deleteBtn.addEventListener("click", async () => {
     deleteBtn.disabled = true;
     deleteBtn.textContent = "Removing...";
 
-    const success = await deleteCountryVisit(currentExistingVisit.id);
+    const success = await deleteVisit(currentExistingVisit.id);
 
     if (success) {
         closeCountryPanel();

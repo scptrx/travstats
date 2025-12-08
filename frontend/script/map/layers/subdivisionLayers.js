@@ -1,7 +1,7 @@
 import { map } from "../mapConfig.js";
 import { loadVisitedSubdivisions } from "../visitManager.js";
 import { deleteCountryLayers } from "./countryLayers.js";
-import { openSubdivisionPanel } from "../subdivisionPanel.js";
+import { openSubdivisionPanel } from "../panels/subdivisionPanel.js";
 
 let visitedSubdivisionsCache = [];
 
@@ -21,10 +21,14 @@ export function renderSubdivisionLayers(countryIsoCode) {
 async function loadAndHighlightVisitedSubdivisions(countryIsoCode) {
     visitedSubdivisionsCache = await loadVisitedSubdivisions(countryIsoCode);
 
-    if (visitedSubdivisionsCache.length > 0) {
-        const visitedCodes = visitedSubdivisionsCache.map((v) => v.subdivisions.code); // .subdivisions.code!
+    console.log("visitedSubdivisionsCache:", visitedSubdivisionsCache);
 
-        map.setFilter("highlight-subdivision", ["in", "GID_1", ...visitedCodes]);
+    if (visitedSubdivisionsCache.length > 0) {
+        const visitedCodes = visitedSubdivisionsCache.filter((v) => v.subdivisions).map((v) => v.subdivisions.code);
+
+        console.log("visitedCodes:", visitedCodes);
+
+        if (visitedCodes.length > 0) map.setFilter("highlight-subdivision", ["in", "GID_1", ...visitedCodes]);
     } else {
         map.setFilter("highlight-subdivision", ["in", "GID_1", ""]);
     }
@@ -132,36 +136,32 @@ function addSubdivisionMapLayers() {
         map.subdivisionHoverHandlerAdded = true;
     }
 
-    if (!map.subdivisionClickHandlerAdded) {
-        map.on("click", "subdivisions-hover", async (e) => {
-            if (!e.features || !e.features.length) return;
+    map.on("click", "subdivisions-hover", async (e) => {
+        if (!e.features || !e.features.length) return;
 
-            const props = e.features[0].properties;
-            const code = props.GID_1;
-            const name = props.NAME_1;
-            const type = props.ENGTYPE_1 == props.TYPE_1 ? props.TYPE_1 : `${props.TYPE_1} (${props.ENGTYPE_1})`;
+        const props = e.features[0].properties;
+        const code = props.GID_1;
 
-            map.setFilter("active-subdivision", ["in", "GID_1", code]);
+        map.setFilter("active-subdivision", ["in", "GID_1", e.features[0].properties.GID_1]);
 
-            const existingVisit = visitedSubdivisionsCache.find((v) => v.subdivision_code === code);
+        if (!visitedSubdivisionsCache.length) {
+            await loadAndHighlightVisitedSubdivisions(props.GID_0);
+        }
 
-            openSubdivisionPanel(
-                {
-                    name: name,
-                    code: code,
-                    country: props.NAME_0,
-                    countryCode: props.GID_0,
-                    type: type || "Subdivision"
-                },
-                existingVisit,
-                () => {
-                    loadAndHighlightVisitedSubdivisions(props.GID_0);
-                }
-            );
-        });
+        const existingVisit = visitedSubdivisionsCache.find((v) => v.subdivisions && v.subdivisions.code === code);
 
-        map.subdivisionClickHandlerAdded = true;
-    }
+        openSubdivisionPanel(
+            {
+                name: props.NAME_1,
+                code: code,
+                country: props.NAME_0,
+                countryCode: props.GID_0,
+                type: props.ENGTYPE_1 == props.TYPE_1 ? props.TYPE_1 : `${props.TYPE_1} (${props.ENGTYPE_1})`
+            },
+            existingVisit,
+            () => loadAndHighlightVisitedSubdivisions(props.GID_0)
+        );
+    });
 }
 
 export function deleteSubdivisionLayers() {
@@ -177,7 +177,6 @@ export function deleteSubdivisionLayers() {
         map.removeSource("subdivisions");
     }
 
-    currentCountryCode = null;
     visitedSubdivisionsCache = [];
 }
 

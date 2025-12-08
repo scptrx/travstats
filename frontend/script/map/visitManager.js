@@ -44,7 +44,57 @@ export async function addCountryVisit(countryIsoCode, countryData, visitDate) {
     }
 }
 
-export async function updateCountryVisit(visitId, visitDate) {
+export async function addSubdivisionVisit(subdivisionData, visitDate) {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+        alert("Please sign in to save your travels!");
+        window.location.href = "pages/sign-in.html";
+        return null;
+    }
+
+    try {
+        const payload = {
+            subdivision_code: subdivisionData.code,
+            subdivision_name: subdivisionData.name,
+            country_iso_code: subdivisionData.countryCode,
+            subdivision_latitude: subdivisionData.latitude,
+            subdivision_longitude: subdivisionData.longitude,
+            type: subdivisionData.type,
+            visit_date: visitDate || new Date().toISOString().split("T")[0],
+            notes: `Visited ${subdivisionData.name}`
+        };
+
+        const res = await fetch(`${API_URL}/visits/add-subdivision`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            console.log("Subdivision added:", subdivisionData.name);
+            return data.visit;
+        } else if (res.status === 409) {
+            console.log("Already visited:", subdivisionData.name);
+            alert(`${subdivisionData.name} is already in your visited list!`);
+            return null;
+        } else {
+            console.error("Error:", data.error);
+            alert(`Failed to add ${subdivisionData.name}: ${data.error}`);
+            return null;
+        }
+    } catch (error) {
+        console.error("Request error:", error);
+        alert("Failed to connect to server");
+        return null;
+    }
+}
+
+export async function updateVisit(visitId, visitDate) {
     const token = localStorage.getItem("accessToken");
     if (!token) {
         alert("Please sign in!");
@@ -80,7 +130,7 @@ export async function updateCountryVisit(visitId, visitDate) {
     }
 }
 
-export async function deleteCountryVisit(visitId) {
+export async function deleteVisit(visitId) {
     const token = localStorage.getItem("accessToken");
     if (!token) {
         alert("Please sign in!");
@@ -118,7 +168,7 @@ export async function loadVisitedCountries() {
     }
 
     try {
-        const res = await fetch(`${API_URL}/visits/my`, {
+        const res = await fetch(`${API_URL}/visits/my-countries`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -135,135 +185,6 @@ export async function loadVisitedCountries() {
     } catch (error) {
         console.error("Failed to load visits:", error);
         return [];
-    }
-}
-
-export async function addSubdivisionVisit(subdivisionData, visitDate) {
-    const token = localStorage.getItem("accessToken");
-    if (!token) {
-        alert("Please sign in to save your travels!");
-        window.location.href = "pages/sign-in.html";
-        return null;
-    }
-
-    try {
-        const res = await fetch(`${API_URL}/visits/add-subdivision`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify({
-                subdivision_code: subdivisionData.code,
-                subdivision_name: subdivisionData.name,
-                country_iso_code: subdivisionData.countryCode,
-                subdivision_latitude: subdivisionData.latitude,
-                subdivision_longitude: subdivisionData.longitude,
-                type: subdivisionData.type,
-                visit_date: visitDate || new Date().toISOString().split("T")[0],
-                notes: `Visited ${subdivisionData.name}`
-            })
-        });
-
-        // stringed json
-        console.log(
-            "Request body:",
-            JSON.stringify({
-                subdivision_code: subdivisionData.code,
-                subdivision_name: subdivisionData.name,
-                country_iso_code: subdivisionData.countryCode,
-                subdivision_latitude: subdivisionData.latitude,
-                subdivision_longitude: subdivisionData.longitude,
-                type: subdivisionData.type,
-                visit_date: visitDate || new Date().toISOString().split("T")[0],
-                notes: `Visited ${subdivisionData.name}`
-            })
-        );
-
-        const data = await res.json();
-
-        if (res.ok) {
-            console.log("Subdivision added:", subdivisionData.name);
-            return data.visit;
-        } else if (res.status === 409) {
-            console.log("Already visited:", subdivisionData.name);
-            return null;
-        } else {
-            console.error("Error:", data.error);
-            alert(`Failed to add ${subdivisionData.name}: ${data.error}`);
-            return null;
-        }
-    } catch (error) {
-        console.error("Request error:", error);
-        alert("Failed to connect to server");
-        return null;
-    }
-}
-
-export async function updateSubdivisionVisit(visitId, visitDate) {
-    const token = localStorage.getItem("accessToken");
-    if (!token) {
-        alert("Please sign in!");
-        return false;
-    }
-
-    try {
-        const res = await fetch(`${API_URL}/visits/subdivision/${visitId}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify({
-                visit_date: visitDate
-            })
-        });
-
-        const data = await res.json();
-
-        if (res.ok) {
-            console.log("Subdivision visit updated");
-            return true;
-        } else {
-            console.error("Error:", data.error);
-            alert(`Failed to update visit: ${data.error}`);
-            return false;
-        }
-    } catch (error) {
-        console.error("Request error:", error);
-        alert("Failed to connect to server");
-        return false;
-    }
-}
-
-export async function deleteSubdivisionVisit(visitId) {
-    const token = localStorage.getItem("accessToken");
-    if (!token) {
-        alert("Please sign in!");
-        return false;
-    }
-
-    try {
-        const res = await fetch(`${API_URL}/visits/my/${visitId}`, {
-            method: "DELETE",
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-
-        if (res.ok) {
-            console.log("Subdivision visit deleted");
-            return true;
-        } else {
-            const data = await res.json();
-            console.error("Error:", data.error);
-            alert(`Failed to delete visit: ${data.error}`);
-            return false;
-        }
-    } catch (error) {
-        console.error("Request error:", error);
-        alert("Failed to connect to server");
-        return false;
     }
 }
 

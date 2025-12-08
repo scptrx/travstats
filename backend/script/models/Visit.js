@@ -100,30 +100,38 @@ class Visit {
         return data;
     }
 
-    static async getUserSubdivisionVisitsByCountry(userId, countryId) {
+    static async getUserCountryVisits(userId) {
         const { data, error } = await supabase
             .from("visits")
             .select(
                 `
                 *,
-                subdivisions (
+                countries (
                     id,
-                    code,
+                    iso_code,
                     name,
-                    type,
-                    country_id
+                    region,
+                    latitude,
+                    longitude
                 )
             `
             )
             .eq("user_id", userId)
-            .eq("subdivisions.country_id", countryId)
-            .not("subdivision_id", "is", null);
+            .is("subdivision_id", null)
+            .is("city_id", null)
+            .order("created_at", { ascending: false });
 
-        if (error) {
-            return { data: null, error };
-        }
+        return { data, error };
+    }
 
-        return { data, error: null };
+    static async getUserSubdivisionVisitsByCountry(userId, countryId) {
+        const { data: subdivisions } = await supabase.from("subdivisions").select("id").eq("country_id", countryId);
+
+        const ids = subdivisions.map((s) => s.id);
+
+        const { data, error } = await supabase.from("visits").select("*, subdivisions(*)").eq("user_id", userId).in("subdivision_id", ids);
+
+        return { data, error };
     }
 }
 export default Visit;

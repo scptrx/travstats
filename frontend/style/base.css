@@ -22,9 +22,6 @@ body {
   font-family: var(--font-family);
   font-size: var(--font-size);
   overflow: hidden;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -39,8 +36,6 @@ h1 {
   font-size: 1.5rem;
   font-weight: 700;
   backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  -webkit-background-clip: text;
   padding: 0.75rem 1.5rem;
   border-radius: 50px;
   border: var(--primary-color) 2px solid;
@@ -94,7 +89,6 @@ body>h1 {
   border-radius: 50px;
   animation: fadeIn 0.5s ease;
 }
-
 
 @keyframes fadeIn {
   from {

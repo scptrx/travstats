@@ -1,16 +1,12 @@
 import { map } from "../mapConfig.js";
 import { loadVisitedCountries } from "../visitManager.js";
-import { openCountryPanel } from "../countryPanel.js";
+import { openCountryPanel } from "../panels/countryPanel.js";
 
 let visitedCountriesCache = [];
 
-map.on("load", () => {
-    addCountryLayers();
-    loadAndHighlightVisitedCountries();
-});
-
-async function loadAndHighlightVisitedCountries() {
+export async function loadAndHighlightVisitedCountries() {
     visitedCountriesCache = await loadVisitedCountries();
+    console.log("visitedCountriesCache:", visitedCountriesCache);
 
     if (visitedCountriesCache.length > 0) {
         const visitedIsoCodes = visitedCountriesCache.map((v) => v.countries.iso_code);

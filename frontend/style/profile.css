@@ -1,7 +1,6 @@
 .profile-container {
   background: var(--glass-bg);
   backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
   padding: 2.5rem;
   border-radius: 24px;
   box-shadow: var(--glass-shadow);
@@ -79,33 +78,9 @@
   transform: translateY(-2px);
 }
 
-.loader {
-  padding: 3rem;
-  text-align: center;
-  animation: pulse 1.5s infinite;
-}
-
-.loader p {
-  font-size: 1.1rem;
-  color: #666;
-}
-
-@keyframes pulse {
-
-  0%,
-  100% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0.5;
-  }
-}
-
 .dashboard-container {
   background: var(--glass-bg);
   backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
   padding: 2.5rem;
   border-radius: 24px;
   box-shadow: var(--glass-shadow);
@@ -162,8 +137,6 @@
   font-weight: 700;
   color: var(--primary-color);
   background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
@@ -185,6 +158,29 @@ select:focus {
 
 select:hover {
   border-color: var(--primary-color);
+}
+
+.loader {
+  padding: 3rem;
+  text-align: center;
+  animation: pulse 1.5s infinite;
+}
+
+.loader p {
+  font-size: 1.1rem;
+  color: #666;
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
 }
 
 @media (max-width: 768px) {

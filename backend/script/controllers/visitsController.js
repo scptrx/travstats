@@ -8,15 +8,7 @@ class VisitsController {
     static async addCountry(req, res) {
         try {
             const token = req.headers.authorization?.replace("Bearer ", "");
-            const {
-                country_iso_code,
-                country_name,
-                country_region,
-                country_latitude,
-                country_longitude,
-                visit_date,
-                notes
-            } = req.body;
+            const { country_iso_code, country_name, country_region, country_latitude, country_longitude, visit_date, notes } = req.body;
 
             if (!token) {
                 return res.status(401).json({ error: "No token" });
@@ -60,16 +52,8 @@ class VisitsController {
     static async addSubdivision(req, res) {
         try {
             const token = req.headers.authorization?.replace("Bearer ", "");
-            const {
-                subdivision_code,
-                subdivision_name,
-                country_iso_code,
-                subdivision_latitude,
-                subdivision_longitude,
-                visit_date,
-                notes,
-                type
-            } = req.body;
+            const { subdivision_code, subdivision_name, country_iso_code, subdivision_latitude, subdivision_longitude, visit_date, notes, type } =
+                req.body;
 
             if (!token) {
                 return res.status(401).json({ error: "No token" });
@@ -99,14 +83,7 @@ class VisitsController {
                 });
             }
 
-            const visit = await Visit.create(
-                user.id,
-                subdivision.country_id,
-                visit_date,
-                notes,
-                subdivision.id,
-                null
-            );
+            const visit = await Visit.create(user.id, subdivision.country_id, visit_date, notes, subdivision.id, null);
 
             logger.info("Subdivision visit added", {
                 user_id: user.id,
@@ -193,6 +170,28 @@ class VisitsController {
         }
     }
 
+    static async getMyCountryVisits(req, res) {
+        try {
+            const token = req.headers.authorization?.replace("Bearer ", "");
+
+            if (!token) {
+                return res.status(401).json({ error: "No token" });
+            }
+
+            const user = await User.getUserByToken(token);
+
+            const { data, error } = await Visit.getUserCountryVisits(user.id);
+
+            if (error) {
+                throw new Error(error.message);
+            }
+
+            res.json({ visits: data });
+        } catch (error) {
+            res.status(400).json({ error: error.message });
+        }
+    }
+
     static async getMySubdivisionVisits(req, res) {
         try {
             const token = req.headers.authorization?.replace("Bearer ", "");
@@ -209,10 +208,7 @@ class VisitsController {
                 return res.status(404).json({ error: "Country not found" });
             }
 
-            const { data, error } = await Visit.getUserSubdivisionVisitsByCountry(
-                user.id,
-                country.id
-            );
+            const { data, error } = await Visit.getUserSubdivisionVisitsByCountry(user.id, country.id);
 
             if (error) {
                 throw new Error(error.message);

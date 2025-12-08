@@ -22,7 +22,7 @@
     }
 }
 
-#country-panel {
+.panel {
     position: fixed;
     top: 6rem;
     right: 1rem;
@@ -37,7 +37,7 @@
     pointer-events: auto;
 }
 
-#country-panel.closing {
+.panel.closing {
     animation: slideOutToRight 0.3s ease;
 }
 
@@ -185,8 +185,15 @@
     transform: translateY(-2px);
 }
 
+.subdivision-country {
+    margin: 0;
+    color: #999;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
 @media (max-width: 768px) {
-    #country-panel {
+    .panel {
         top: auto;
         bottom: 0;
         right: 0;
@@ -197,7 +204,7 @@
         animation: slideInFromBottom 0.3s ease;
     }
 
-    #country-panel.closing {
+    .panel.closing {
         animation: slideOutToBottom 0.3s ease;
     }
 
@@ -223,51 +230,5 @@
             opacity: 0;
             transform: translateY(100%);
         }
-    }
-}
-
-/* Subdivision Panel - использует те же стили что и country-panel */
-#subdivision-panel {
-    position: fixed;
-    top: 5rem;
-    right: 1rem;
-    width: 360px;
-    max-width: calc(100vw - 2rem);
-    background: var(--glass-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 16px;
-    box-shadow: var(--glass-shadow);
-    z-index: 2000;
-    animation: slideInFromRight 0.3s ease;
-    pointer-events: auto;
-}
-
-#subdivision-panel.closing {
-    animation: slideOutToRight 0.3s ease;
-}
-
-.subdivision-country {
-    margin: 0;
-    color: #999;
-    font-size: 0.85rem;
-    font-weight: 500;
-}
-
-/* Адаптив для мобильных */
-@media (max-width: 768px) {
-    #subdivision-panel {
-        top: auto;
-        bottom: 0;
-        right: 0;
-        left: 0;
-        width: 100%;
-        max-width: 100%;
-        border-radius: 16px 16px 0 0;
-        animation: slideInFromBottom 0.3s ease;
-    }
-
-    #subdivision-panel.closing {
-        animation: slideOutToBottom 0.3s ease;
     }
 }

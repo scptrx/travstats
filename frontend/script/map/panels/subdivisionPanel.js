@@ -1,4 +1,7 @@
-import { addSubdivisionVisit, updateSubdivisionVisit, deleteSubdivisionVisit } from "./visitManager.js";
+import { addSubdivisionVisit, updateVisit, deleteVisit } from "../visitManager.js";
+import { deleteSubdivisionLayers } from "../layers/subdivisionLayers.js";
+import { addCountryLayers, loadAndHighlightVisitedCountries } from "../layers/countryLayers.js";
+import { clearSelectedSubdivision } from "../layers/subdivisionLayers.js";
 
 const panel = document.getElementById("subdivision-panel");
 const subdivisionNameEl = document.getElementById("subdivision-name");
@@ -9,29 +12,54 @@ const subdivisionAddBtn = document.getElementById("subdivision-add-btn");
 const subdivisionUpdateBtn = document.getElementById("subdivision-update-btn");
 const subdivisionDeleteBtn = document.getElementById("subdivision-delete-btn");
 const subdivisionCloseBtn = document.getElementById("subdivision-panel-close-btn");
+const countriesBtn = document.getElementById("countries-btn");
 
 let currentSubdivisionData = null;
 let currentExistingVisit = null;
 let currentOnUpdate = null;
 
+const ADD_TEXT = "Mark as Visited";
+const UPDATE_TEXT = "Update Visit Date";
+const REMOVE_TEXT = "Remove from Visited";
+
 subdivisionVisitDateInput.max = new Date().toISOString().split("T")[0];
+
+function resetButtonsToDefaults() {
+    subdivisionAddBtn.disabled = false;
+    subdivisionAddBtn.textContent = ADD_TEXT;
+    subdivisionUpdateBtn.disabled = false;
+    subdivisionUpdateBtn.textContent = UPDATE_TEXT;
+    subdivisionDeleteBtn.disabled = false;
+    subdivisionDeleteBtn.textContent = REMOVE_TEXT;
+}
 
 export function openSubdivisionPanel(subdivisionData, existingVisit, onUpdate) {
     currentSubdivisionData = subdivisionData;
     currentExistingVisit = existingVisit;
     currentOnUpdate = onUpdate;
 
+    resetButtonsToDefaults();
+
     subdivisionNameEl.textContent = subdivisionData.name;
     subdivisionCountryEl.textContent = subdivisionData.type || "Subdivision";
 
+    console.log("existingVisit:", existingVisit);
+    console.log("subdivisionData:", subdivisionData);
+
     const isVisited = !!existingVisit;
+    console.log("isVisited:", isVisited);
 
     if (isVisited) {
         subdivisionVisitDateInput.value = existingVisit.visit_date.split("T")[0];
         subdivisionDateLabel.textContent = "Visit Date";
 
         subdivisionAddBtn.style.display = "none";
-        subdivisionUpdateBtn.style.display = "block";
+        subdivisionUpdateBtn.style.display = "none";
+
+        const revealUpdate = () => (subdivisionUpdateBtn.style.display = "block");
+        subdivisionVisitDateInput.addEventListener("input", revealUpdate, { once: true });
+        subdivisionVisitDateInput.addEventListener("pointerdown", revealUpdate, { once: true });
+
         subdivisionDeleteBtn.style.display = "block";
     } else {
         subdivisionVisitDateInput.value = new Date().toISOString().split("T")[0];
@@ -47,6 +75,7 @@ export function openSubdivisionPanel(subdivisionData, existingVisit, onUpdate) {
 }
 
 export function closeSubdivisionPanel() {
+    clearSelectedSubdivision();
     panel.classList.add("closing");
     setTimeout(() => {
         panel.style.display = "none";
@@ -54,14 +83,30 @@ export function closeSubdivisionPanel() {
         currentSubdivisionData = null;
         currentExistingVisit = null;
         currentOnUpdate = null;
+        resetButtonsToDefaults();
     }, 300);
 }
 
-subdivisionCloseBtn.addEventListener("click", closeSubdivisionPanel);
+subdivisionCloseBtn.addEventListener("click", () => {
+    closeSubdivisionPanel();
+    deleteSubdivisionLayers();
+    addCountryLayers();
+    loadAndHighlightVisitedCountries();
+});
+
+countriesBtn.addEventListener("click", () => {
+    closeSubdivisionPanel();
+    deleteSubdivisionLayers();
+    addCountryLayers();
+    loadAndHighlightVisitedCountries();
+});
 
 document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && panel.style.display !== "none") {
         closeSubdivisionPanel();
+        deleteSubdivisionLayers();
+        addCountryLayers();
+        loadAndHighlightVisitedCountries();
     }
 });
 
@@ -79,7 +124,7 @@ subdivisionAddBtn.addEventListener("click", async () => {
         if (currentOnUpdate) currentOnUpdate();
     } else {
         subdivisionAddBtn.disabled = false;
-        subdivisionAddBtn.textContent = "Mark as Visited";
+        subdivisionAddBtn.textContent = ADD_TEXT;
     }
 });
 
@@ -90,14 +135,14 @@ subdivisionUpdateBtn.addEventListener("click", async () => {
     subdivisionUpdateBtn.disabled = true;
     subdivisionUpdateBtn.textContent = "Updating...";
 
-    const success = await updateSubdivisionVisit(currentExistingVisit.id, newDate);
+    const success = await updateVisit(currentExistingVisit.id, newDate);
 
     if (success) {
         closeSubdivisionPanel();
         if (currentOnUpdate) currentOnUpdate();
     } else {
         subdivisionUpdateBtn.disabled = false;
-        subdivisionUpdateBtn.textContent = "Update Visit Date";
+        subdivisionUpdateBtn.textContent = UPDATE_TEXT;
     }
 });
 
@@ -111,13 +156,13 @@ subdivisionDeleteBtn.addEventListener("click", async () => {
     subdivisionDeleteBtn.disabled = true;
     subdivisionDeleteBtn.textContent = "Removing...";
 
-    const success = await deleteSubdivisionVisit(currentExistingVisit.id);
+    const success = await deleteVisit(currentExistingVisit.id);
 
     if (success) {
         closeSubdivisionPanel();
         if (currentOnUpdate) currentOnUpdate();
     } else {
         subdivisionDeleteBtn.disabled = false;
-        subdivisionDeleteBtn.textContent = "Remove from Visited";
+        subdivisionDeleteBtn.textContent = REMOVE_TEXT;
     }
 });

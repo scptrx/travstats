@@ -19,6 +19,9 @@ router.put("/:id", VisitsController.updateVisit);
 // GET /visits/my
 router.get("/my", VisitsController.getMyVisits);
 
+// GET /visits/my-countries
+router.get("/my-countries", VisitsController.getMyCountryVisits);
+
 // GET /visits/my-subdivisions/:countryCode
 router.get("/my-subdivisions/:countryCode", VisitsController.getMySubdivisionVisits);
 
