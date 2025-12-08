@@ -136,32 +136,35 @@ function addSubdivisionMapLayers() {
         map.subdivisionHoverHandlerAdded = true;
     }
 
-    map.on("click", "subdivisions-hover", async (e) => {
-        if (!e.features || !e.features.length) return;
+    if (!map.subdivisionClickHandlerAdded) {
+        map.on("click", "subdivisions-hover", async (e) => {
+            if (!e.features || !e.features.length) return;
 
-        const props = e.features[0].properties;
-        const code = props.GID_1;
+            const props = e.features[0].properties;
+            const code = props.GID_1;
 
-        map.setFilter("active-subdivision", ["in", "GID_1", e.features[0].properties.GID_1]);
+            map.setFilter("active-subdivision", ["in", "GID_1", e.features[0].properties.GID_1]);
 
-        if (!visitedSubdivisionsCache.length) {
-            await loadAndHighlightVisitedSubdivisions(props.GID_0);
-        }
+            if (!visitedSubdivisionsCache.length) {
+                await loadAndHighlightVisitedSubdivisions(props.GID_0);
+            }
 
-        const existingVisit = visitedSubdivisionsCache.find((v) => v.subdivisions && v.subdivisions.code === code);
+            const existingVisit = visitedSubdivisionsCache.find((v) => v.subdivisions && v.subdivisions.code === code);
 
-        openSubdivisionPanel(
-            {
-                name: props.NAME_1,
-                code: code,
-                country: props.NAME_0,
-                countryCode: props.GID_0,
-                type: props.ENGTYPE_1 == props.TYPE_1 ? props.TYPE_1 : `${props.TYPE_1} (${props.ENGTYPE_1})`
-            },
-            existingVisit,
-            () => loadAndHighlightVisitedSubdivisions(props.GID_0)
-        );
-    });
+            openSubdivisionPanel(
+                {
+                    name: props.NAME_1,
+                    code: code,
+                    country: props.NAME_0,
+                    countryCode: props.GID_0,
+                    type: props.ENGTYPE_1 == props.TYPE_1 ? props.TYPE_1 : `${props.TYPE_1} (${props.ENGTYPE_1})`
+                },
+                existingVisit,
+                () => loadAndHighlightVisitedSubdivisions(props.GID_0)
+            );
+        });
+        map.subdivisionClickHandlerAdded = true;
+    }
 }
 
 export function deleteSubdivisionLayers() {

@@ -126,29 +126,31 @@ export function addCountryLayers() {
         map.hoverHandlerAdded = true;
     }
 
-    map.on("click", "countries-hover", async (e) => {
-        if (!e.features || !e.features.length) return;
+    if (!map.clickHandlerAdded) {
+        map.on("click", "countries-hover", async (e) => {
+            if (!e.features || !e.features.length) return;
 
-        const props = e.features[0].properties;
-        const code = props.adm0_a3;
-        const name = props.name;
+            const props = e.features[0].properties;
+            const code = props.adm0_a3;
+            const name = props.name;
 
-        map.setFilter("active-country", ["in", "adm0_a3", code]);
+            map.setFilter("active-country", ["in", "adm0_a3", code]);
 
-        const existingVisit = visitedCountriesCache.find((v) => v.countries.iso_code === code);
+            const existingVisit = visitedCountriesCache.find((v) => v.countries.iso_code === code);
 
-        openCountryPanel(
-            {
-                name: name,
-                code: code,
-                region: props.continent || null
-            },
-            existingVisit,
-            () => {
-                loadAndHighlightVisitedCountries();
-            }
-        );
-    });
+            openCountryPanel(
+                {
+                    name: name,
+                    code: code,
+                    region: props.continent || null
+                },
+                existingVisit,
+                () => {
+                    loadAndHighlightVisitedCountries();
+                }
+            );
+        });
+    }
     map.clickHandlerAdded = true;
 }
 
