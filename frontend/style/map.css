@@ -1,7 +1,6 @@
 #map {
     position: absolute;
     border: 1px solid var(--primary-color);
-    border-radius: 24px;
     width: 100vw;
     height: 100vh;
     top: 50%;

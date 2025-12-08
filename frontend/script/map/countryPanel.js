@@ -7,6 +7,7 @@ const visitDateInput = document.getElementById('visit-date-input');
 const dateLabel = document.getElementById('date-label');
 const addBtn = document.getElementById('add-btn');
 const updateBtn = document.getElementById('update-btn');
+const subdivisionsBtn = document.getElementById('subdivisions-btn');
 const deleteBtn = document.getElementById('delete-btn');
 const closeBtn = document.getElementById('panel-close-btn');
 
@@ -46,7 +47,12 @@ export function openCountryPanel(countryData, existingVisit, onUpdate) {
         dateLabel.textContent = 'Visit Date';
         
         addBtn.style.display = 'none';
-        updateBtn.style.display = 'block';
+        updateBtn.style.display = 'none';
+        const revealUpdate = () => updateBtn.style.display = 'block';
+        visitDateInput.addEventListener('input', revealUpdate, { once: true });
+        visitDateInput.addEventListener('pointerdown', revealUpdate, { once: true });
+        
+        subdivisionsBtn.style.display = 'block';
         deleteBtn.style.display = 'block';
     } else {
         visitDateInput.value = new Date().toISOString().split('T')[0];
@@ -55,6 +61,7 @@ export function openCountryPanel(countryData, existingVisit, onUpdate) {
         addBtn.style.display = 'block';
         updateBtn.style.display = 'none';
         deleteBtn.style.display = 'none';
+        subdivisionsBtn.style.display = 'none';
     }
 
     panel.style.display = 'block';

@@ -1,4 +1,7 @@
-function checkUserStatus() {
+import { validateToken } from "./auth/utils/auth.js";    
+
+async function checkUserStatus() {
+    await validateToken();
     const token = localStorage.getItem("accessToken");
     const signInDiv = document.getElementById("sign-in");
     

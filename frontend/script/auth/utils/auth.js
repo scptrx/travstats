@@ -56,6 +56,31 @@ export async function requireAuth() {
     }
 }
 
+export async function validateToken() {
+    const token = localStorage.getItem("accessToken");
+    if (!token) return false;
+
+    try {
+        const res = await fetch(`${API_URL}/auth/check`, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+        
+        if (!res.ok) {
+            clearAuth();
+            window.location.reload();
+            return false;
+        }
+        
+        return true;
+    } catch (err) {
+        console.error("Token validation error:", err);
+        clearAuth();
+        return false;
+    }
+}
+
 export function saveAuth(session, user) {
     localStorage.setItem("accessToken", session.access_token);
     localStorage.setItem("refreshToken", session.refresh_token);

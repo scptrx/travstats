@@ -171,6 +171,17 @@
     transform: translateY(0);
 }
 
+.secondary-btn {
+    background: #419122;
+    color: white;
+    box-shadow: 0 2px 8px rgba(84, 188, 53, 0.3);
+}
+.secondary-btn:hover {
+    background: #3a7a1d;
+    box-shadow: 0 4px 12px rgba(84, 188, 53, 0.4);
+    transform: translateY(-2px);
+}
+
 @media (max-width: 768px) {
     #country-panel {
         top: auto;
