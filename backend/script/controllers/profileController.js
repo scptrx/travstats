@@ -14,7 +14,7 @@ class ProfileController {
             }
 
             const user = await User.getUserByToken(token);
-            
+
             const oldUsername = await Profile.getUsername(user.id);
 
             const profile = await Profile.updateUsername(user.id, username);
@@ -47,7 +47,7 @@ class ProfileController {
             }
 
             const filePath = `avatars/${user.id}-${Date.now()}.png`;
-            
+
             const { error: uploadError } = await supabase.storage
                 .from("profile_pics_bucket")
                 .upload(filePath, file.buffer, {
@@ -79,5 +79,4 @@ class ProfileController {
         }
     }
 }
-
 export default ProfileController;

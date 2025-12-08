@@ -4,14 +4,14 @@ import logger from "../utils/logger.js";
 class Country {
     static async getOrCreate(isoCode, countryData) {
         let { data: country, error } = await supabase
-            .from('countries')
-            .select('id')
-            .eq('iso_code', isoCode)
+            .from("countries")
+            .select("id")
+            .eq("iso_code", isoCode)
             .single();
-        
+
         if (error || !country) {
             const { data: newCountry, error: insertError } = await supabase
-                .from('countries')
+                .from("countries")
                 .insert({
                     iso_code: isoCode,
                     name: countryData.name,
@@ -21,31 +21,31 @@ class Country {
                 })
                 .select()
                 .single();
-            
+
             if (insertError) {
-                logger.error("Failed to create country", { 
-                    error: insertError.message, 
-                    isoCode 
+                logger.error("Failed to create country", {
+                    error: insertError.message,
+                    isoCode
                 });
                 throw new Error(`Failed to create country: ${insertError.message}`);
             }
-            
-            logger.info("Country created", { 
-                isoCode, 
-                name: countryData.name 
+
+            logger.info("Country created", {
+                isoCode,
+                name: countryData.name
             });
-            
+
             country = newCountry;
         }
-        
+
         return country;
     }
 
     static async getByIsoCode(isoCode) {
         const { data, error } = await supabase
-            .from('countries')
-            .select('*')
-            .eq('iso_code', isoCode)
+            .from("countries")
+            .select("*")
+            .eq("iso_code", isoCode)
             .single();
 
         if (error) {
@@ -56,10 +56,7 @@ class Country {
     }
 
     static async getAll() {
-        const { data, error } = await supabase
-            .from('countries')
-            .select('*')
-            .order('name');
+        const { data, error } = await supabase.from("countries").select("*").order("name");
 
         if (error) {
             throw new Error(error.message);
@@ -68,5 +65,4 @@ class Country {
         return data;
     }
 }
-
 export default Country;

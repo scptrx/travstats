@@ -8,10 +8,10 @@ export async function checkAuthAndRedirect(redirectUrl = "profile.html") {
     try {
         const res = await fetch(`${API_URL}/auth/check`, {
             headers: {
-                "Authorization": `Bearer ${token}`
+                Authorization: `Bearer ${token}`
             }
         });
-        
+
         if (res.ok) {
             window.location.href = redirectUrl;
             return true;
@@ -36,16 +36,16 @@ export async function requireAuth() {
     try {
         const res = await fetch(`${API_URL}/auth/check`, {
             headers: {
-                "Authorization": `Bearer ${token}`
+                Authorization: `Bearer ${token}`
             }
         });
-        
+
         if (!res.ok) {
             clearAuth();
             window.location.href = "sign-in.html";
             return null;
         }
-        
+
         const data = await res.json();
         return data;
     } catch (error) {
@@ -63,16 +63,16 @@ export async function validateToken() {
     try {
         const res = await fetch(`${API_URL}/auth/check`, {
             headers: {
-                "Authorization": `Bearer ${token}`
+                Authorization: `Bearer ${token}`
             }
         });
-        
+
         if (!res.ok) {
             clearAuth();
             window.location.reload();
             return false;
         }
-        
+
         return true;
     } catch (err) {
         console.error("Token validation error:", err);
@@ -100,10 +100,10 @@ export function getToken() {
 export async function login(email, password) {
     const res = await fetch(`${API_URL}/auth/login`, {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
     });
-    
+
     const data = await res.json();
     return { res, data };
 }
@@ -111,10 +111,10 @@ export async function login(email, password) {
 export async function register(email, password, username) {
     const res = await fetch(`${API_URL}/auth/register`, {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password, username })
     });
-    
+
     const data = await res.json();
     return { res, data };
 }

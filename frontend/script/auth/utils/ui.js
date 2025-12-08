@@ -1,12 +1,12 @@
 export function showError(inputId, message) {
     const input = document.getElementById(inputId);
     input.style.borderColor = "red";
-    
+
     const oldError = input.parentElement.querySelector(".error-message");
     if (oldError) {
         oldError.remove();
     }
-    
+
     const errorDiv = document.createElement("div");
     errorDiv.className = "error-message";
     errorDiv.style.color = "red";
@@ -19,7 +19,7 @@ export function showError(inputId, message) {
 export function clearError(inputId) {
     const input = document.getElementById(inputId);
     input.style.borderColor = "";
-    
+
     const errorMsg = input.parentElement.querySelector(".error-message");
     if (errorMsg) {
         errorMsg.remove();
@@ -27,7 +27,7 @@ export function clearError(inputId) {
 }
 
 export function setupErrorClearOnInput(...inputIds) {
-    inputIds.forEach(inputId => {
+    inputIds.forEach((inputId) => {
         document.getElementById(inputId).addEventListener("input", () => clearError(inputId));
     });
 }

@@ -9,9 +9,9 @@ class AuthController {
 
             const user = await User.register(email, password, username);
 
-            logger.info("User registered", { 
-                userId: user.id, 
-                email: user.email 
+            logger.info("User registered", {
+                userId: user.id,
+                email: user.email
             });
 
             res.json({ user });
@@ -25,16 +25,16 @@ class AuthController {
             const { email, password } = req.body;
 
             const { user, session } = await User.login(email, password);
-            
+
             const profile = await Profile.getOrCreate(
                 user.id,
                 user.email,
                 user.user_metadata?.username
             );
 
-            logger.info("User logged in", { 
-                userId: user.id, 
-                email: user.email 
+            logger.info("User logged in", {
+                userId: user.id,
+                email: user.email
             });
 
             res.json({ user, session, profile });
@@ -52,16 +52,16 @@ class AuthController {
             }
 
             const user = await User.getUserByToken(token);
-            
+
             const profile = await Profile.getOrCreate(
                 user.id,
                 user.email,
                 user.user_metadata?.username
             );
 
-            logger.info("User checked", { 
-                userId: user.id, 
-                email: user.email 
+            logger.info("User checked", {
+                userId: user.id,
+                email: user.email
             });
 
             res.json({ user, profile });
@@ -70,5 +70,4 @@ class AuthController {
         }
     }
 }
-
 export default AuthController;

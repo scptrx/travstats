@@ -2,12 +2,15 @@ import { supabase } from "../supabase.js";
 
 class User {
     static async getUserByToken(token) {
-        const { data: { user }, error } = await supabase.auth.getUser(token);
-        
+        const {
+            data: { user },
+            error
+        } = await supabase.auth.getUser(token);
+
         if (error) {
             throw new Error(error.message);
         }
-        
+
         return user;
     }
 
@@ -40,5 +43,4 @@ class User {
         return { user: data.user, session: data.session };
     }
 }
-
 export default User;

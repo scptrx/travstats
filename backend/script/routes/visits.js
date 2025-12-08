@@ -1,6 +1,6 @@
 import express from "express";
 import VisitsController from "../controllers/visitsController.js";
-import { validateAddCountry, validateAddSubdivision, validateDeleteVisit } from "../middlewares/validators.js";    
+import { validateAddCountry, validateAddSubdivision, validateDeleteVisit } from "../middlewares/validators.js";
 
 const router = express.Router();
 
@@ -18,5 +18,8 @@ router.put("/:id", VisitsController.updateVisit);
 
 // GET /visits/my
 router.get("/my", VisitsController.getMyVisits);
+
+// GET /visits/my-subdivisions/:countryCode
+router.get("/my-subdivisions/:countryCode", VisitsController.getMySubdivisionVisits);
 
 export default router;

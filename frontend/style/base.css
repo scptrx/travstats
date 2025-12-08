@@ -78,13 +78,14 @@ form {
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-body > h1 {
+body>h1 {
   font-size: 2.5rem;
   margin-bottom: 0.5rem;
   background: var(--glass-bg);
@@ -100,13 +101,14 @@ body > h1 {
     opacity: 0;
     transform: translateY(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-body > p {
+body>p {
   text-align: center;
   color: white;
   font-size: 1.1rem;
@@ -115,11 +117,11 @@ body > p {
   animation: fadeIn 0.5s ease 0.1s both;
 }
 
-form > div {
+form>div {
   margin-bottom: 1.5rem;
 }
 
-form > div:last-child {
+form>div:last-child {
   margin-bottom: 0;
   margin-top: 2rem;
 }
@@ -160,7 +162,7 @@ input::placeholder {
 
 form button[type="submit"],
 form button[type="button"],
-body > button {
+body>button {
   width: 100%;
   padding: 1rem;
   background: var(--primary-color);
@@ -177,7 +179,7 @@ body > button {
 
 form button[type="submit"]:hover,
 form button[type="button"]:hover,
-body > button:hover {
+body>button:hover {
   background: var(--primary-dark);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(216, 131, 40, 0.4);
@@ -185,19 +187,19 @@ body > button:hover {
 
 form button[type="submit"]:active,
 form button[type="button"]:active,
-body > button:active {
+body>button:active {
   transform: translateY(0);
 }
 
-form > div > div,
-body > p:last-of-type {
+form>div>div,
+body>p:last-of-type {
   text-align: center;
   margin-top: 1.5rem;
   color: #666;
   font-size: 0.95rem;
 }
 
-body > p:last-of-type {
+body>p:last-of-type {
   background: var(--glass-bg);
   backdrop-filter: blur(20px);
   padding: 1rem 2rem;

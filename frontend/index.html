@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,73 +13,101 @@
     <script src="https://unpkg.com/maplibre-gl@^5.13.0/dist/maplibre-gl.js"></script>
     <link href="https://unpkg.com/maplibre-gl@^5.13.0/dist/maplibre-gl.css" rel="stylesheet" />
 </head>
+
 <body>
     <div id="map"></div>
-    
-    <div id="gui-top"> 
+
+    <div id="gui-top">
         <div>
             <h1>Travstats</h1>
         </div>
-        
+
         <div>
             <div id="searchbox">
                 <input type="text" id="searchInput" placeholder="Add a new location...">
                 <div id="suggestions"></div>
             </div>
         </div>
-        
+
         <div>
             <div id="buttons-row">
                 <div id="sign-in">
-                    <button id="user-profile-button" type="button" onclick="window.location.href='pages/sign-in.html'">Sign In</button>
+                    <button id="user-profile-button" type="button"
+                        onclick="window.location.href='pages/sign-in.html'">Sign In</button>
                 </div>
-            </div>    
+            </div>
         </div>
     </div>
 
     <div id="gui-bottom">
-        <div id="buttons-row"> 
+        <div id="buttons-row">
             <button id="countries-btn">Countries</button>
             <button id="cities-btn">Cities</button>
-            <button id="showAirports-btn">Airports</button>
+            <!-- <button id="showAirports-btn">Airports</button> -->
         </div>
     </div>
-    
-<div id="country-panel" style="display: none;">
-    <div class="panel-header">
-        <h2 id="country-name">Country Name</h2>
-        <button id="panel-close-btn" class="close-btn">×</button>
-    </div>
-    
-    <p id="country-region" class="country-region">Region</p>
-    
-    <div class="panel-content">
-        <div class="date-input-group">
-            <label for="visit-date-input" id="date-label">When did you visit?</label>
-            <input 
-                type="date" 
-                id="visit-date-input"
-                max=""
-            />
+
+    <div id="country-panel" style="display: none;">
+        <div class="panel-header">
+            <h2 id="country-name">Country Name</h2>
+            <button id="panel-close-btn" class="close-btn">×</button>
         </div>
 
-        <div class="panel-actions">
-            <button id="add-btn" class="action-btn primary-btn" style="display: none;">
-                Mark as Visited
-            </button>
-            <button id="update-btn" class="action-btn primary-btn" style="display: none;">
-                Update Visit Date
-            </button>
-            <button id="subdivisions-btn" class="action-btn secondary-btn" style="display: none;">
-                View Subdivisions
-            </button>
-            <button id="delete-btn" class="action-btn danger-btn" style="display: none;">
-                Remove from Visited
-            </button>
+        <p id="country-region" class="country-region">Region</p>
+
+        <div class="panel-content">
+            <div class="date-input-group">
+                <label for="visit-date-input" id="date-label">When did you visit?</label>
+                <input type="date" id="visit-date-input" max="" />
+            </div>
+
+            <div class="panel-actions">
+                <button id="add-btn" class="action-btn primary-btn" style="display: none;">
+                    Mark as Visited
+                </button>
+                <button id="update-btn" class="action-btn primary-btn" style="display: none;">
+                    Update Visit Date
+                </button>
+                <button id="subdivisions-btn" class="action-btn secondary-btn" style="display: none;">
+                    View Subdivisions
+                </button>
+                <button id="delete-btn" class="action-btn danger-btn" style="display: none;">
+                    Remove from Visited
+                </button>
+            </div>
         </div>
     </div>
-</div>
+
+    <div id="subdivision-panel" style="display: none;">
+        <div class="panel-header">
+            <div>
+                <h2 id="subdivision-name">Subdivision Name</h2>
+                <p id="subdivision-country" class="subdivision-country">Country</p>
+            </div>
+            <button id="subdivision-panel-close-btn" class="close-btn">×</button>
+        </div>
+
+        <div class="panel-content">
+            <div class="date-input-group">
+                <label for="subdivision-visit-date-input" id="subdivision-date-label">When did you visit?</label>
+                <input type="date" id="subdivision-visit-date-input" max="" />
+            </div>
+
+            <div class="panel-actions">
+                <button id="subdivision-add-btn" class="action-btn primary-btn" style="display: none;">
+                    Mark as Visited
+                </button>
+                <button id="subdivision-update-btn" class="action-btn primary-btn" style="display: none;">
+                    Update Visit Date
+                </button>
+                <button id="subdivision-delete-btn" class="action-btn danger-btn" style="display: none;">
+                    Remove from Visited
+                </button>
+            </div>
+        </div>
+    </div>
 
 </body>
 <script type="module" src="script/main.js"></script>
+
 </html>

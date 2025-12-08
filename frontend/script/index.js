@@ -1,10 +1,10 @@
-import { validateToken } from "./auth/utils/auth.js";    
+import { validateToken } from "./auth/utils/auth.js";
 
 async function checkUserStatus() {
     await validateToken();
     const token = localStorage.getItem("accessToken");
     const signInDiv = document.getElementById("sign-in");
-    
+
     if (token) {
         signInDiv.innerHTML = `
             <button id="user-profile-button" type="button" onclick="window.location.href='pages/profile.html'">My Profile</button>

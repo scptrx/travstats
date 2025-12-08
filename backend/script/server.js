@@ -21,23 +21,23 @@ app.use("/profile", profileRouter);
 app.use("/visits", visitsRouter);
 
 app.use((err, req, res, next) => {
-    logger.error('Unhandled error:', {
+    logger.error("Unhandled error:", {
         error: err.message,
         stack: err.stack,
         url: req.url,
         method: req.method,
         body: req.body
-     });
-  
-  res.status(500).json({ error: 'Internal server error' });
-}); 
+    });
 
-process.on('unhandledRejection', (reason) => {
-    logger.error('Unhandled Promise Rejection:', { reason });
+    res.status(500).json({ error: "Internal server error" });
 });
 
-process.on('uncaughtException', (error) => {
-    logger.error('Uncaught Exception:', {
+process.on("unhandledRejection", (reason) => {
+    logger.error("Unhandled Promise Rejection:", { reason });
+});
+
+process.on("uncaughtException", (error) => {
+    logger.error("Uncaught Exception:", {
         error: error.message,
         stack: error.stack
     });
@@ -45,9 +45,8 @@ process.on('uncaughtException', (error) => {
 });
 
 app.listen(process.env.PORT, () => {
-  console.log(`Backend running on http://localhost:${process.env.PORT}`);
-  
-  console.log("Supabase URL:", process.env.SUPABASE_URL ? "Loaded" : "Not Loaded");
-  console.log("Supabase Anon Key:", process.env.SUPABASE_ANON_PUBLIC_KEY ? "Loaded" : "Not Loaded" );
-});
+    console.log(`Backend running on http://localhost:${process.env.PORT}`);
 
+    console.log("Supabase URL:", process.env.SUPABASE_URL ? "Loaded" : "Not Loaded");
+    console.log("Supabase Anon Key:", process.env.SUPABASE_ANON_PUBLIC_KEY ? "Loaded" : "Not Loaded");
+});

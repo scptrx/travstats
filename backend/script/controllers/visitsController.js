@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 import Visit from "../models/Visit.js";
 import Country from "../models/Country.js";
+import Subdivision from "../models/Subdivision.js";
 import logger from "../utils/logger.js";
 
 class VisitsController {
@@ -49,8 +50,8 @@ class VisitsController {
 
             res.json({ visit });
         } catch (error) {
-            logger.error("Failed to add visit", { 
-                error: error.message 
+            logger.error("Failed to add visit", {
+                error: error.message
             });
             res.status(400).json({ error: error.message });
         }
@@ -60,13 +61,14 @@ class VisitsController {
         try {
             const token = req.headers.authorization?.replace("Bearer ", "");
             const {
-                subdivision_iso_code,
+                subdivision_code,
                 subdivision_name,
-                country_id,
+                country_iso_code,
                 subdivision_latitude,
                 subdivision_longitude,
                 visit_date,
-                notes
+                notes,
+                type
             } = req.body;
 
             if (!token) {
@@ -75,14 +77,20 @@ class VisitsController {
 
             const user = await User.getUserByToken(token);
 
-            const subdivision = await Subdivision.getOrCreate(subdivision_iso_code, {
+            const country = await Country.getByIsoCode(country_iso_code);
+            if (!country) {
+                return res.status(404).json({ error: "Country not found" });
+            }
+
+            const subdivision = await Subdivision.getOrCreate(subdivision_code, {
                 name: subdivision_name,
-                country_id: country_id,
+                country_id: country.id,
                 latitude: subdivision_latitude,
-                longitude: subdivision_longitude
+                longitude: subdivision_longitude,
+                type: type
             });
 
-            const existingVisit = await Visit.checkExists(user.id, subdivision.id);
+            const existingVisit = await Visit.checkExists(user.id, null, subdivision.id);
 
             if (existingVisit) {
                 return res.status(409).json({
@@ -91,18 +99,25 @@ class VisitsController {
                 });
             }
 
-            const visit = await Visit.create(user.id, subdivision.id, visit_date, notes);
+            const visit = await Visit.create(
+                user.id,
+                subdivision.country_id,
+                visit_date,
+                notes,
+                subdivision.id,
+                null
+            );
 
             logger.info("Subdivision visit added", {
                 user_id: user.id,
-                subdivision_iso: subdivision_iso_code,
+                subdivision_code: subdivision_code,
                 subdivision_name: subdivision_name
             });
 
             res.json({ visit });
         } catch (error) {
-            logger.error("Failed to add subdivision visit", { 
-                error: error.message 
+            logger.error("Failed to add subdivision visit", {
+                error: error.message
             });
             res.status(400).json({ error: error.message });
         }
@@ -125,9 +140,9 @@ class VisitsController {
                 notes
             });
 
-            logger.info("Visit updated", { 
-                user_id: user.id, 
-                visit_id: id 
+            logger.info("Visit updated", {
+                user_id: user.id,
+                visit_id: id
             });
 
             res.json({ visit: updatedVisit });
@@ -149,9 +164,9 @@ class VisitsController {
 
             await Visit.delete(id, user.id);
 
-            logger.info("Visit deleted", { 
-                user_id: user.id, 
-                visit_id: id 
+            logger.info("Visit deleted", {
+                user_id: user.id,
+                visit_id: id
             });
 
             res.json({ message: "Visit deleted" });
@@ -177,6 +192,36 @@ class VisitsController {
             res.status(400).json({ error: error.message });
         }
     }
-}
 
+    static async getMySubdivisionVisits(req, res) {
+        try {
+            const token = req.headers.authorization?.replace("Bearer ", "");
+            const { countryCode } = req.params;
+
+            if (!token) {
+                return res.status(401).json({ error: "No token" });
+            }
+
+            const user = await User.getUserByToken(token);
+
+            const country = await Country.getByIsoCode(countryCode);
+            if (!country) {
+                return res.status(404).json({ error: "Country not found" });
+            }
+
+            const { data, error } = await Visit.getUserSubdivisionVisitsByCountry(
+                user.id,
+                country.id
+            );
+
+            if (error) {
+                throw new Error(error.message);
+            }
+
+            res.json({ visits: data });
+        } catch (error) {
+            res.status(400).json({ error: error.message });
+        }
+    }
+}
 export default VisitsController;

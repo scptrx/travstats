@@ -31,7 +31,7 @@
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
-.profile-container > h1 {
+.profile-container>h1 {
   font-size: 2rem;
   margin-bottom: 2rem;
   color: #333;
@@ -91,10 +91,13 @@
 }
 
 @keyframes pulse {
-  0%, 100% { 
+
+  0%,
+  100% {
     opacity: 1;
   }
-  50% { 
+
+  50% {
     opacity: 0.5;
   }
 }
@@ -112,7 +115,7 @@
   animation: slideUp 0.5s ease 0.2s both;
 }
 
-.dashboard-container > h1 {
+.dashboard-container>h1 {
   font-size: 2rem;
   margin-bottom: 2rem;
   color: #333;
@@ -195,8 +198,8 @@ select:hover {
     margin: 1rem auto;
   }
 
-  .profile-container > h1,
-  .dashboard-container > h1 {
+  .profile-container>h1,
+  .dashboard-container>h1 {
     font-size: 1.75rem;
   }
 
@@ -216,4 +219,3 @@ select:hover {
     align-self: flex-end;
   }
 }
-
