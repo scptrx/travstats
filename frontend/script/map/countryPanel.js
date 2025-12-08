@@ -14,22 +14,34 @@ let currentCountryData = null;
 let currentExistingVisit = null;
 let currentOnUpdate = null;
 
-// Устанавливаем максимальную дату (сегодня)
+const ADD_TEXT = 'Mark as Visited';
+const UPDATE_TEXT = 'Update Visit Date';
+const REMOVE_TEXT = 'Remove from Visited';
+
 visitDateInput.max = new Date().toISOString().split('T')[0];
+
+function resetButtonsToDefaults() {
+    addBtn.disabled = false;
+    addBtn.textContent = ADD_TEXT;
+    updateBtn.disabled = false;
+    updateBtn.textContent = UPDATE_TEXT;
+    deleteBtn.disabled = false;
+    deleteBtn.textContent = REMOVE_TEXT;
+}
 
 export function openCountryPanel(countryData, existingVisit, onUpdate) {
     currentCountryData = countryData;
     currentExistingVisit = existingVisit;
     currentOnUpdate = onUpdate;
 
-    // Заполняем данные
+    resetButtonsToDefaults();
+
     countryNameEl.textContent = countryData.name;
     countryRegionEl.textContent = countryData.region || 'Unknown region';
 
     const isVisited = !!existingVisit;
     
     if (isVisited) {
-        // Страна посещена
         visitDateInput.value = existingVisit.visit_date.split('T')[0];
         dateLabel.textContent = 'Visit Date';
         
@@ -37,7 +49,6 @@ export function openCountryPanel(countryData, existingVisit, onUpdate) {
         updateBtn.style.display = 'block';
         deleteBtn.style.display = 'block';
     } else {
-        // Страна не посещена
         visitDateInput.value = new Date().toISOString().split('T')[0];
         dateLabel.textContent = 'When did you visit?';
         
@@ -46,7 +57,6 @@ export function openCountryPanel(countryData, existingVisit, onUpdate) {
         deleteBtn.style.display = 'none';
     }
 
-    // Показываем панель
     panel.style.display = 'block';
     panel.classList.remove('closing');
 }
@@ -59,20 +69,18 @@ export function closeCountryPanel() {
         currentCountryData = null;
         currentExistingVisit = null;
         currentOnUpdate = null;
+        resetButtonsToDefaults();
     }, 300);
 }
 
-// Обработчик закрытия
 closeBtn.addEventListener('click', closeCountryPanel);
 
-// Закрытие по Escape
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && panel.style.display !== 'none') {
         closeCountryPanel();
     }
 });
 
-// Обработчик добавления новой страны
 addBtn.addEventListener('click', async () => {
     if (!currentCountryData) return;
     
@@ -87,11 +95,10 @@ addBtn.addEventListener('click', async () => {
         if (currentOnUpdate) currentOnUpdate();
     } else {
         addBtn.disabled = false;
-        addBtn.textContent = 'Mark as Visited';
+        addBtn.textContent = ADD_TEXT;
     }
 });
 
-// Обработчик обновления даты
 updateBtn.addEventListener('click', async () => {
     if (!currentExistingVisit) return;
     
@@ -106,18 +113,16 @@ updateBtn.addEventListener('click', async () => {
         if (currentOnUpdate) currentOnUpdate();
     } else {
         updateBtn.disabled = false;
-        updateBtn.textContent = 'Update Visit Date';
+        updateBtn.textContent = UPDATE_TEXT;
     }
 });
 
-// Обработчик удаления
 deleteBtn.addEventListener('click', async () => {
     if (!currentExistingVisit || !currentCountryData) return;
     
     if (!confirm(`Remove ${currentCountryData.name} from visited countries?`)) {
         return;
     }
-    
     deleteBtn.disabled = true;
     deleteBtn.textContent = 'Removing...';
     
@@ -128,6 +133,6 @@ deleteBtn.addEventListener('click', async () => {
         if (currentOnUpdate) currentOnUpdate();
     } else {
         deleteBtn.disabled = false;
-        deleteBtn.textContent = 'Remove from Visited';
+        deleteBtn.textContent = REMOVE_TEXT;
     }
 });

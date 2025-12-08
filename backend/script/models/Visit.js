@@ -1,9 +1,6 @@
 import { supabase } from "../supabase.js";
 
 class Visit {
-    /**
-     * Create a new visit
-     */
     static async create(userId, countryId, visitDate, notes) {
         const { data, error } = await supabase
             .from('visits')
@@ -42,9 +39,6 @@ class Visit {
         return data;
     }
 
-    /**
-     * Check if a visit exists
-     */
     static async checkExists(userId, countryId) {
         const { data } = await supabase
             .from('visits')
@@ -58,9 +52,6 @@ class Visit {
         return data;
     }
 
-    /**
-     * Delete a visit
-     */
     static async delete(visitId, userId) {
         const { error } = await supabase
             .from('visits')
@@ -75,9 +66,6 @@ class Visit {
         return true;
     }
 
-    /**
-     * Get all visits of a user
-     */
     static async getUserVisits(userId) {
         const { data, error } = await supabase
             .from('visits')

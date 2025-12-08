@@ -22,16 +22,15 @@
 
 #country-panel {
     position: fixed;
-    top: 5rem;
+    top: 6rem;
     right: 1rem;
     width: 360px;
     max-width: calc(100vw - 2rem);
     background: var(--glass-bg);
     backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
     border-radius: 16px;
     box-shadow: var(--glass-shadow);
-    z-index: 2000;
+    z-index: 1000;
     animation: slideInFromRight 0.3s ease;
     pointer-events: auto;
 }
@@ -172,7 +171,6 @@
     transform: translateY(0);
 }
 
-/* Адаптив для мобильных */
 @media (max-width: 768px) {
     #country-panel {
         top: auto;

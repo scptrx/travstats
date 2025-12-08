@@ -2,10 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Travstats</title>
     <link rel="stylesheet" href="style/base.css">
     <link rel="stylesheet" href="style/gui.css">
     <link rel="stylesheet" href="style/map.css">
+    <link rel="stylesheet" href="style/panel.css">
 
     <script src="https://unpkg.com/maplibre-gl@^5.13.0/dist/maplibre-gl.js"></script>
     <link href="https://unpkg.com/maplibre-gl@^5.13.0/dist/maplibre-gl.css" rel="stylesheet" />
@@ -36,13 +38,44 @@
 
     <div id="gui-bottom">
         <div id="buttons-row"> 
-            <button id="countriesButton">Countries</button>
-            <button id="subdivisionsButton">Subdivisions</button>
-            <button id="citiesButton">Cities</button>
-            <button id="showAirportsButton">Airports</button>
+            <button id="countries-btn">Countries</button>
+            <button id="cities-btn">Cities</button>
+            <button id="showAirports-btn">Airports</button>
+        </div>
+    </div>
+    
+<div id="country-panel" style="display: none;">
+    <div class="panel-header">
+        <h2 id="country-name">Country Name</h2>
+        <button id="panel-close-btn" class="close-btn">×</button>
+    </div>
+    
+    <p id="country-region" class="country-region">Region</p>
+    
+    <div class="panel-content">
+        <div class="date-input-group">
+            <label for="visit-date-input" id="date-label">When did you visit?</label>
+            <input 
+                type="date" 
+                id="visit-date-input"
+                max=""
+            />
         </div>
 
-        
+        <div class="panel-actions">
+            <button id="add-btn" class="action-btn primary-btn" style="display: none;">
+                Mark as Visited
+            </button>
+            <button id="update-btn" class="action-btn primary-btn" style="display: none;">
+                Update Visit Date
+            </button>
+            <button id="delete-btn" class="action-btn danger-btn" style="display: none;">
+                Remove from Visited
+            </button>
+        </div>
+    </div>
+</div>
+
 </body>
 <script type="module" src="script/main.js"></script>
 </html>

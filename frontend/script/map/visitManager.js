@@ -1,3 +1,5 @@
+const API_URL = "http://localhost:3000";
+
 export async function addCountryVisit(countryIsoCode, countryData, visitDate) {
     const token = localStorage.getItem("accessToken");
     if (!token) {
@@ -7,7 +9,7 @@ export async function addCountryVisit(countryIsoCode, countryData, visitDate) {
     }
     
     try {
-        const res = await fetch("http://localhost:3000/visits/add-country", {
+        const res = await fetch(`${API_URL}/visits/add-country`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -50,7 +52,7 @@ export async function updateCountryVisit(visitId, visitDate) {
     }
     
     try {
-        const res = await fetch(`http://localhost:3000/visits/${visitId}`, {
+        const res = await fetch(`${API_URL}/visits/${visitId}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -86,7 +88,7 @@ export async function deleteCountryVisit(visitId) {
     }
     
     try {
-        const res = await fetch(`http://localhost:3000/visits/${visitId}`, {
+        const res = await fetch(`${API_URL}/visits/${visitId}`, {
             method: "DELETE",
             headers: {
                 "Authorization": `Bearer ${token}`
@@ -116,7 +118,7 @@ export async function loadVisitedCountries() {
     }
     
     try {
-        const res = await fetch("http://localhost:3000/visits/my", {
+        const res = await fetch(`${API_URL}/visits/my`, {
             headers: {
                 "Authorization": `Bearer ${token}`
             }

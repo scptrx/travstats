@@ -20,24 +20,22 @@ app.use("/auth", authRouter);
 app.use("/profile", profileRouter);
 app.use("/visits", visitsRouter);
 
-// app.use((err, req, res, next) => {
-//     logger.error('Unhandled error:', {
-//         error: err.message,
-//         stack: err.stack,
-//         url: req.url,
-//         method: req.method,
-//         body: req.body
-//     });
-    
-    // res.status(500).json({ error: 'Internal server error' });
-// });
+app.use((err, req, res, next) => {
+    logger.error('Unhandled error:', {
+        error: err.message,
+        stack: err.stack,
+        url: req.url,
+        method: req.method,
+        body: req.body
+     });
+  
+  res.status(500).json({ error: 'Internal server error' });
+}); 
 
-// Promise rejections
 process.on('unhandledRejection', (reason) => {
     logger.error('Unhandled Promise Rejection:', { reason });
 });
 
-// uncaught exceptions
 process.on('uncaughtException', (error) => {
     logger.error('Uncaught Exception:', {
         error: error.message,

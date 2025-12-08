@@ -62,11 +62,9 @@ h1:hover {
   box-shadow: var(--glass-shadow-hover);
 }
 
-/* Контейнер формы */
 form {
   background: var(--glass-bg);
   backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
   padding: 2.5rem;
   border-radius: 24px;
   box-shadow: var(--glass-shadow);
@@ -108,7 +106,6 @@ body > h1 {
   }
 }
 
-/* Описание под заголовком */
 body > p {
   text-align: center;
   color: white;
@@ -118,7 +115,6 @@ body > p {
   animation: fadeIn 0.5s ease 0.1s both;
 }
 
-/* Группы полей формы */
 form > div {
   margin-bottom: 1.5rem;
 }
@@ -128,7 +124,6 @@ form > div:last-child {
   margin-top: 2rem;
 }
 
-/* Labels */
 label {
   display: block;
   font-weight: 600;
@@ -137,7 +132,6 @@ label {
   font-size: 0.95rem;
 }
 
-/* Inputs */
 input[type="text"],
 input[type="email"],
 input[type="password"] {
@@ -164,7 +158,6 @@ input::placeholder {
   color: #999;
 }
 
-/* Кнопки в формах */
 form button[type="submit"],
 form button[type="button"],
 body > button {

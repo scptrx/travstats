@@ -1,41 +1,13 @@
-import { loadVisitedCountries } from "../map/visitManager.js";
+const API_URL = "http://localhost:3000";
 
-async function checkAuth() {
-    const token = localStorage.getItem("accessToken");
-    
-    if (!token) {
-        window.location.href = "sign-in.html";
-        return null;
-    }
-    
-    try {
-        const res = await fetch("http://localhost:3000/auth/check", {
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
-        });
-        
-        if (!res.ok) {
-            localStorage.clear();
-            window.location.href = "sign-in.html";
-            return null;
-        }
-        
-        const data = await res.json();
-        return data;
-    } catch (error) {
-        console.error("Auth check failed:", error);
-        localStorage.clear();
-        window.location.href = "sign-in.html";
-        return null;
-    }
-}
+import { loadVisitedCountries } from "../map/visitManager.js";
+import { requireAuth } from "../auth/utils/auth.js";
 
 async function displayUserProfile() {
     const profileInfo = document.querySelector(".profile-info");
     profileInfo.innerHTML = '<p>Loading...</p>';
 
-    const response = await checkAuth();
+    const response = await requireAuth();
     if (!response) {
         profileInfo.innerHTML = '<p>Not authenticated. Redirecting...</p>';
         return;
@@ -92,7 +64,7 @@ async function changeProfilePic(token) {
     const form = new FormData();
     form.append("file", file);
 
-    await fetch("http://localhost:3000/profile/upload-avatar", {
+    await fetch(`${API_URL}/profile/upload-avatar`, {
         method: "POST",
         headers: {
         Authorization: `Bearer ${token}`
@@ -117,9 +89,9 @@ function signOut() {
     window.location.href = "sign-in.html";
 }
 
-document.addEventListener("DOMContentLoaded", displayUserProfile);
-
 loadVisitedCountries().then(visits => {
     const countriesCountElem = document.getElementById("countries-count");
     countriesCountElem.textContent = visits.length;
 });
+
+document.addEventListener("DOMContentLoaded", displayUserProfile);
