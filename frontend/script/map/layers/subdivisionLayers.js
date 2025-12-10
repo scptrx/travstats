@@ -143,7 +143,9 @@ function addSubdivisionMapLayers() {
             const props = e.features[0].properties;
             const code = props.GID_1;
 
-            map.setFilter("active-subdivision", ["in", "GID_1", e.features[0].properties.GID_1]);
+            if (map.getLayer("active-subdivision")) {
+                map.setFilter("active-subdivision", ["in", "GID_1", e.features[0].properties.GID_1]);
+            }
 
             if (!visitedSubdivisionsCache.length) {
                 await loadAndHighlightVisitedSubdivisions(props.GID_0);

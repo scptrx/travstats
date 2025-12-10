@@ -134,7 +134,9 @@ export function addCountryLayers() {
             const code = props.adm0_a3;
             const name = props.name;
 
-            map.setFilter("active-country", ["in", "adm0_a3", code]);
+            if (map.getLayer("active-country")) {
+                map.setFilter("active-country", ["in", "adm0_a3", code]);
+            }
 
             const existingVisit = visitedCountriesCache.find((v) => v.countries.iso_code === code);
 
@@ -166,6 +168,8 @@ export function deleteCountryLayers() {
     if (map.getSource("countries")) {
         map.removeSource("countries");
     }
+
+    visitedCountriesCache = [];
 }
 
 export function clearSelectedCountry() {

@@ -179,12 +179,6 @@ body>button:hover {
   box-shadow: 0 6px 20px rgba(216, 131, 40, 0.4);
 }
 
-form button[type="submit"]:active,
-form button[type="button"]:active,
-body>button:active {
-  transform: translateY(0);
-}
-
 form>div>div,
 body>p:last-of-type {
   text-align: center;

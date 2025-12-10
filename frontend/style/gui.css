@@ -10,6 +10,18 @@
   }
 }
 
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
 #gui-top {
   position: fixed;
   display: flex;
@@ -39,8 +51,8 @@
 }
 
 #gui-top>div:nth-child(2) {
-  align-items: flex-start;
   justify-content: center;
+  align-items: flex-start;
   max-width: 600px;
 }
 
@@ -62,26 +74,6 @@
   justify-content: center;
   z-index: 1000;
   animation: slideUp 0.5s ease 0.4s both;
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateX(-50%) translateY(20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-}
-
-#searchbox {
-  display: block;
-  width: 100%;
-  max-width: 500px;
-  margin: 0;
-  position: relative;
 }
 
 #searchInput {
