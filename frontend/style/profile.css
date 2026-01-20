@@ -7,7 +7,6 @@
   width: 100%;
   max-width: 900px;
   margin: 2rem auto;
-  /* animation: slideUp 0.5s ease; */
 }
 
 .profile-container .logo {
@@ -51,15 +50,23 @@
   background: white;
   border-radius: 16px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: var(--primary-color) 2px solid;
+
 }
 
-.profile-picture {
-  width: 120px;
-  height: 120px;
+.avatar {
+  width: 50%;
+  height: 50%;
   border-radius: 50%;
   object-fit: cover;
   border: 4px solid var(--primary-color);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.profile-pic-upload {
+  border: var(--primary-color) 2px solid;
+  border-radius: 12px;
+  padding: 1rem;
 }
 
 .dashboard-container {
@@ -71,7 +78,6 @@
   width: 100%;
   max-width: 900px;
   margin: 2rem auto;
-  /* animation: slideUp 0.5s ease 0.2s both; */
 }
 
 .dashboard-container>h1 {

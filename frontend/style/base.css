@@ -65,20 +65,7 @@ form {
   box-shadow: var(--glass-shadow);
   width: 100%;
   max-width: 420px;
-  /* animation: slideUp 0.5s ease; */
 }
-
-/* @keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-} */
 
 body>h1 {
   font-size: 2.5rem;
@@ -87,20 +74,11 @@ body>h1 {
   backdrop-filter: blur(20px);
   padding: 1rem 2rem;
   border-radius: 50px;
-  /* animation: fadeIn 0.5s ease; */
 }
 
-/* @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-} */
+div>h2 {
+  padding: 0.5rem 1rem;
+}
 
 body>p {
   text-align: center;
@@ -108,7 +86,6 @@ body>p {
   font-size: 1.1rem;
   margin-bottom: 2rem;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  /* animation: fadeIn 0.5s ease 0.1s both; */
 }
 
 form>div {
@@ -193,7 +170,6 @@ body>p:last-of-type {
   padding: 1rem 2rem;
   border-radius: 50px;
   box-shadow: var(--glass-shadow);
-  /* animation: fadeIn 0.5s ease 0.3s both; */
   color: #333;
 }
 

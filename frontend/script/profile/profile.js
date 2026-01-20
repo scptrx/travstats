@@ -30,26 +30,20 @@ async function displayUserProfile() {
 
     profileInfo.innerHTML = `
         <img src="${profile.profile_picture_url || "/frontend/assets/img/profile-picture.jpg"}" 
-             alt="Avatar" class="avatar" style="width: 100px; height: 100px; border-radius: 50%;">
+             alt="Avatar" class="avatar">
         <p><strong>Username:</strong> ${profile.username}</p>
         <p><strong>Email:</strong> ${profile.email}</p>
         <p><strong>Member Since:</strong> ${memberSince}</p>
+        <div class="profile-pic-upload">
         <input type="file" id="profile-pic-input" accept="image/*">
         <button id="change-profile-pic-button">Upload Profile Picture</button>
-        <button id="change-username-button">Change Username</button>
-        <button id="change-password-button">Change Password</button>
+        </div>
         <button id="sign-out-button">Sign Out</button>
     `;
 
     const token = localStorage.getItem("accessToken");
 
     document.getElementById("change-profile-pic-button").addEventListener("click", async () => await changeProfilePic(token));
-
-    // document.getElementById("change-password-button")
-    //     .addEventListener("click", changePassword);
-
-    // document.getElementById("change-username-button")
-    //     .addEventListener("click", changeUsername);
 
     document.getElementById("sign-out-button").addEventListener("click", signOut);
 }
@@ -70,14 +64,6 @@ async function changeProfilePic(token) {
     });
     displayUserProfile();
 }
-
-// async function changeUsername() {
-//     const newUsername = prompt("Enter your new username:");
-//     if (!newUsername) return;
-// }
-
-// async function changePassword() {
-// }
 
 function signOut() {
     localStorage.clear();
