@@ -7,7 +7,7 @@
   width: 100%;
   max-width: 900px;
   margin: 2rem auto;
-  animation: slideUp 0.5s ease;
+  /* animation: slideUp 0.5s ease; */
 }
 
 .profile-container .logo {
@@ -71,7 +71,7 @@
   width: 100%;
   max-width: 900px;
   margin: 2rem auto;
-  animation: slideUp 0.5s ease 0.2s both;
+  /* animation: slideUp 0.5s ease 0.2s both; */
 }
 
 .dashboard-container>h1 {
