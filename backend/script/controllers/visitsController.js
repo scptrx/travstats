@@ -2,6 +2,7 @@ import User from "../models/User.js";
 import Visit from "../models/Visit.js";
 import Country from "../models/Country.js";
 import Subdivision from "../models/Subdivision.js";
+import City from "../models/City.js";
 import logger from "../utils/logger.js";
 
 class VisitsController {
@@ -96,6 +97,50 @@ class VisitsController {
             logger.error("Failed to add subdivision visit", {
                 error: error.message
             });
+            res.status(400).json({ error: error.message });
+        }
+    }
+
+    static async addCity(req, res) {
+        try {
+            const token = req.headers.authorization?.replace("Bearer ", "");
+            const { city_name, country_name, city_latitude, city_longitude, visit_date, notes } = req.body;
+
+            if (!token) {
+                return res.status(401).json({ error: "No token" });
+            }
+
+            const user = await User.getUserByToken(token);
+
+            const country = await Country.getByName(country_name);
+            if (!country) {
+                return res.status(404).json({ error: "Country not found" });
+            }
+
+            const countryVisitExists = await Visit.checkExists(user.id, country.id);
+
+            if (!countryVisitExists) {
+                await Visit.create(user.id, country.id, visit_date, "Auto added from city visit");
+            }
+
+            const city = await City.getOrCreate(city_name, {
+                country_id: country.id,
+                latitude: city_latitude,
+                longitude: city_longitude
+            });
+
+            const existingCityVisit = await Visit.checkExists(user.id, null, null, city.id);
+            if (existingCityVisit) {
+                return res.status(409).json({
+                    error: "City already visited",
+                    visit_id: existingCityVisit.id
+                });
+            }
+
+            const visit = await Visit.create(user.id, country.id, visit_date, notes, null, city.id);
+
+            res.json({ visit });
+        } catch (error) {
             res.status(400).json({ error: error.message });
         }
     }
@@ -209,6 +254,27 @@ class VisitsController {
             }
 
             const { data, error } = await Visit.getUserSubdivisionVisitsByCountry(user.id, country.id);
+
+            if (error) {
+                throw new Error(error.message);
+            }
+
+            res.json({ visits: data });
+        } catch (error) {
+            res.status(400).json({ error: error.message });
+        }
+    }
+
+    static async getMyCityVisits(req, res) {
+        try {
+            const token = req.headers.authorization?.replace("Bearer ", "");
+
+            if (!token) {
+                return res.status(401).json({ error: "No token" });
+            }
+
+            const user = await User.getUserByToken(token);
+            const { data, error } = await Visit.getUserCityVisits(user.id);
 
             if (error) {
                 throw new Error(error.message);

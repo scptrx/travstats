@@ -10,6 +10,7 @@ export const map = new maplibregl.Map({
     center: [20, 49],
     zoom: 6
 });
+
 map.dragRotate.disable();
 
 map.on("load", () => {

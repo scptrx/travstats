@@ -2,6 +2,7 @@ import { map } from "../core/mapConfig.js";
 import { openCityPanel } from "../panels/cityPanel.js";
 import { loadAndDisplayVisitedCities } from "../layers/cityLayer.js";
 import { API_URL } from "../../api.js";
+import { applyMapMode, setMapMode } from "../core/mapModeController.js";
 
 let geocoder = null;
 let searchMarker = null;
@@ -77,6 +78,7 @@ export function initializeCitySearch() {
 }
 
 function handleCitySelection(result) {
+    applyMapMode("cities");
     const coordinates = result.center;
     const cityData = result.properties;
 
@@ -88,8 +90,7 @@ function handleCitySelection(result) {
 
     map.flyTo({
         center: coordinates,
-        zoom: 12,
-        duration: 2000
+        zoom: 1000
     });
 
     console.log("Selected city with extracted data:", cityData);

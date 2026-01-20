@@ -44,7 +44,9 @@ class Visit {
     static async checkExists(userId, countryId, subdivisionId = null, cityId = null) {
         let query = supabase.from("visits").select("id").eq("user_id", userId);
 
-        if (subdivisionId) {
+        if (cityId) {
+            query = query.eq("city_id", cityId);
+        } else if (subdivisionId) {
             query = query.eq("subdivision_id", subdivisionId);
         } else if (countryId) {
             query = query.eq("country_id", countryId).is("subdivision_id", null).is("city_id", null);
@@ -132,6 +134,43 @@ class Visit {
         const { data, error } = await supabase.from("visits").select("*, subdivisions(*)").eq("user_id", userId).in("subdivision_id", ids);
 
         return { data, error };
+    }
+
+    static async getUserCityVisits(userId) {
+        const { data, error } = await supabase
+            .from("visits")
+            .select(
+                `
+            *,
+            cities (
+                id,
+                name,
+                latitude,
+                longitude
+            ),
+            countries (
+                id,
+                name
+            )
+        `
+            )
+            .eq("user_id", userId)
+            .not("city_id", "is", null)
+            .order("created_at", { ascending: false });
+
+        if (error) {
+            return { data: null, error };
+        }
+
+        const transformed = data.map((visit) => ({
+            ...visit,
+            cities: {
+                ...visit.cities,
+                country_name: visit.countries?.name || null
+            }
+        }));
+
+        return { data: transformed, error: null };
     }
 }
 export default Visit;

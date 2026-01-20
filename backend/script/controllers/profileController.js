@@ -48,20 +48,16 @@ class ProfileController {
 
             const filePath = `avatars/${user.id}-${Date.now()}.png`;
 
-            const { error: uploadError } = await supabase.storage
-                .from("profile_pics_bucket")
-                .upload(filePath, file.buffer, {
-                    contentType: file.mimetype,
-                    upsert: true
-                });
+            const { error: uploadError } = await supabase.storage.from("profile_pics_bucket").upload(filePath, file.buffer, {
+                contentType: file.mimetype,
+                upsert: true
+            });
 
             if (uploadError) {
                 throw new Error(uploadError.message);
             }
 
-            const { data: urlData } = supabase.storage
-                .from("profile_pics_bucket")
-                .getPublicUrl(filePath);
+            const { data: urlData } = supabase.storage.from("profile_pics_bucket").getPublicUrl(filePath);
 
             const publicUrl = urlData.publicUrl;
 

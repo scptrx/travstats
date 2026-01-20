@@ -3,11 +3,7 @@ import logger from "../utils/logger.js";
 
 class Country {
     static async getOrCreate(isoCode, countryData) {
-        let { data: country, error } = await supabase
-            .from("countries")
-            .select("id")
-            .eq("iso_code", isoCode)
-            .single();
+        let { data: country, error } = await supabase.from("countries").select("id").eq("iso_code", isoCode).single();
 
         if (error || !country) {
             const { data: newCountry, error: insertError } = await supabase
@@ -42,11 +38,7 @@ class Country {
     }
 
     static async getByIsoCode(isoCode) {
-        const { data, error } = await supabase
-            .from("countries")
-            .select("*")
-            .eq("iso_code", isoCode)
-            .single();
+        const { data, error } = await supabase.from("countries").select("*").eq("iso_code", isoCode).single();
 
         if (error) {
             return null;
@@ -55,14 +47,24 @@ class Country {
         return data;
     }
 
-    static async getAll() {
-        const { data, error } = await supabase.from("countries").select("*").order("name");
+    static async getByName(name) {
+        const { data, error } = await supabase.from("countries").select("*").eq("name", name).single();
 
         if (error) {
-            throw new Error(error.message);
+            return null;
         }
 
         return data;
     }
+
+    // static async getAll() {
+    //     const { data, error } = await supabase.from("countries").select("*").order("name");
+
+    //     if (error) {
+    //         throw new Error(error.message);
+    //     }
+
+    //     return data;
+    // }
 }
 export default Country;

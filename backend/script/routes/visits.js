@@ -10,6 +10,9 @@ router.post("/add-country", validateAddCountry, VisitsController.addCountry);
 // POST /visits/add-subdivision
 router.post("/add-subdivision", validateAddSubdivision, VisitsController.addSubdivision);
 
+// POST /visits/add-city
+router.post("/add-city", VisitsController.addCity);
+
 // DELETE /visits/:id
 router.delete("/:id", validateDeleteVisit, VisitsController.deleteVisit);
 
@@ -24,5 +27,8 @@ router.get("/my-countries", VisitsController.getMyCountryVisits);
 
 // GET /visits/my-subdivisions/:countryCode
 router.get("/my-subdivisions/:countryCode", VisitsController.getMySubdivisionVisits);
+
+// GET /visits/my-cities/
+router.get("/my-cities", VisitsController.getMyCityVisits);
 
 export default router;

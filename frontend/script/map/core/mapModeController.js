@@ -1,6 +1,7 @@
 import { addCountryLayers, deleteCountryLayers } from "../layers/countryLayer.js";
 import { deleteSubdivisionLayers } from "../layers/subdivisionLayer.js";
 import { loadAndDisplayVisitedCities, clearCityMarkers } from "../layers/cityLayer.js";
+import { updateActiveButton } from "./mapModeUI.js";
 
 const MAP_MODE_KEY = "mapMode";
 
@@ -15,9 +16,11 @@ export function setMapMode(mode) {
 }
 
 export function applyMapMode(mode) {
+    setMapMode(mode);
     deleteCountryLayers();
     deleteSubdivisionLayers();
     clearCityMarkers();
+    updateActiveButton();
 
     if (mode === "countries") {
         addCountryLayers();

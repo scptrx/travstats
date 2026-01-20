@@ -1,10 +1,9 @@
 import { updateVisit, deleteVisit } from "../visits/visitManager.js";
+import { addCityVisit } from "../visits/cityVisitManager.js";
 
 const panel = document.getElementById("city-panel");
 const cityNameEl = document.getElementById("city-name");
 const cityCountryEl = document.getElementById("city-country");
-const cityRegionEl = document.getElementById("city-region");
-const cityTypeEl = document.getElementById("city-type");
 const cityCoordinatesEl = document.getElementById("city-coordinates");
 const visitDateInput = document.getElementById("city-visit-date-input");
 const dateLabel = document.getElementById("city-date-label");
@@ -32,20 +31,6 @@ function resetButtonsToDefaults() {
     deleteBtn.textContent = REMOVE_TEXT;
 }
 
-function getCityTypeLabel(type) {
-    const types = {
-        city: "City",
-        town: "Town",
-        village: "Village",
-        hamlet: "Hamlet",
-        suburb: "Suburb",
-        neighbourhood: "Neighbourhood",
-        administrative: "Administrative",
-        locality: "Locality"
-    };
-    return types[type] || "Place";
-}
-
 export function openCityPanel(cityData, existingVisit, onUpdate) {
     console.log("openCityPanel called with:", cityData);
 
@@ -57,13 +42,7 @@ export function openCityPanel(cityData, existingVisit, onUpdate) {
 
     cityNameEl.textContent = cityData.name;
     console.log("Setting country to:", cityData.country);
-    cityCountryEl.textContent = cityData.country || "Unknown";
-
-    console.log("Setting region to:", cityData.region);
-    cityRegionEl.textContent = cityData.region || cityData.state || "Unknown";
-
-    console.log("Setting type to:", cityData.type);
-    cityTypeEl.textContent = getCityTypeLabel(cityData.type);
+    cityCountryEl.textContent = cityData.country_name || cityData.country;
 
     console.log("Setting coordinates:", cityData.latitude, cityData.longitude);
     cityCoordinatesEl.textContent = `${cityData.latitude.toFixed(4)}°, ${cityData.longitude.toFixed(4)}°`;
