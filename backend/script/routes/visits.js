@@ -1,6 +1,6 @@
 import express from "express";
 import VisitsController from "../controllers/visitsController.js";
-import { validateAddCountry, validateAddSubdivision, validateDeleteVisit } from "../middlewares/validators.js";
+import { validateAddCountry, validateAddSubdivision, validateDeleteVisit, validateUpdateVisit } from "../middlewares/validators.js";
 
 const router = express.Router();
 
@@ -14,7 +14,7 @@ router.post("/add-subdivision", validateAddSubdivision, VisitsController.addSubd
 router.delete("/:id", validateDeleteVisit, VisitsController.deleteVisit);
 
 // PUT /visits/:id
-router.put("/:id", VisitsController.updateVisit);
+router.put("/:id", validateUpdateVisit, VisitsController.updateVisit);
 
 // GET /visits/my
 router.get("/my", VisitsController.getMyVisits);

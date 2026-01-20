@@ -3,11 +3,7 @@ import logger from "../utils/logger.js";
 
 class Subdivision {
     static async getOrCreate(isoCode, subdivisionData) {
-        let { data: subdivision, error } = await supabase
-            .from("subdivisions")
-            .select("id")
-            .eq("code", isoCode)
-            .single();
+        let { data: subdivision, error } = await supabase.from("subdivisions").select("id").eq("code", isoCode).single();
 
         if (error || !subdivision) {
             const { data: newSubdivision, error: insertError } = await supabase
@@ -43,11 +39,7 @@ class Subdivision {
     }
 
     static async getByIsoCode(isoCode) {
-        const { data, error } = await supabase
-            .from("subdivisions")
-            .select("*")
-            .eq("code", isoCode)
-            .single();
+        const { data, error } = await supabase.from("subdivisions").select("*").eq("code", isoCode).single();
 
         if (error) {
             return null;
@@ -57,11 +49,7 @@ class Subdivision {
     }
 
     static async getByCountryIso(countryIso) {
-        const country = await supabase
-            .from("countries")
-            .select("id")
-            .eq("iso_code", countryIso)
-            .single();
+        const country = await supabase.from("countries").select("id").eq("iso_code", countryIso).single();
 
         if (!country.data) {
             throw new Error(`Country with ISO code ${countryIso} not found`);
@@ -69,10 +57,7 @@ class Subdivision {
 
         const countryId = country.data.id;
 
-        const { data, error } = await supabase
-            .from("subdivisions")
-            .select("*")
-            .eq("country_id", countryId);
+        const { data, error } = await supabase.from("subdivisions").select("*").eq("country_id", countryId);
         if (error) {
             throw new Error(`Failed to fetch subdivisions: ${error.message}`);
         }

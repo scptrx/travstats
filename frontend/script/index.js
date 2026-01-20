@@ -5,6 +5,7 @@ import "./map/layers/subdivisionLayer.js";
 import "./map/layers/cityLayer.js";
 
 import { validateToken } from "./auth/utils/auth.js";
+import { initMapModeUI } from "./map/core/mapModeUI.js";
 
 async function checkUserStatus() {
     await validateToken();
@@ -20,4 +21,7 @@ async function checkUserStatus() {
     }
 }
 
-document.addEventListener("DOMContentLoaded", checkUserStatus);
+document.addEventListener("DOMContentLoaded", () => {
+    checkUserStatus();
+    initMapModeUI();
+});

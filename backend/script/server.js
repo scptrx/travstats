@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import authRouter from "./routes/auth.js";
 import profileRouter from "./routes/profile.js";
 import visitsRouter from "./routes/visits.js";
+import geocodingRoutes from "./routes/geocode.js";
 import logger from "./utils/logger.js";
 import { requestLogger } from "./middlewares/requestLogger.js";
 
@@ -19,6 +20,7 @@ app.use(requestLogger);
 app.use("/auth", authRouter);
 app.use("/profile", profileRouter);
 app.use("/visits", visitsRouter);
+app.use("/geocode", geocodingRoutes);
 
 app.use((err, req, res, next) => {
     logger.error("Unhandled error:", {

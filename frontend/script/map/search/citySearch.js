@@ -1,6 +1,7 @@
 import { map } from "../core/mapConfig.js";
 import { openCityPanel } from "../panels/cityPanel.js";
 import { loadAndDisplayVisitedCities } from "../layers/cityLayer.js";
+import { API_URL } from "../../api.js";
 
 let geocoder = null;
 let searchMarker = null;
@@ -9,16 +10,23 @@ export function initializeCitySearch() {
     const geocoderApi = {
         forwardGeocode: async (config) => {
             const features = [];
-            try {
-                const request = `https://nominatim.openstreetmap.org/search?q=${config.query}&format=geojson&polygon_geojson=1&addressdetails=1`;
-                const response = await fetch(request);
-                const geojson = await response.json();
 
-                for (const feature of geojson.features) {
-                    const center = [
-                        feature.bbox[0] + (feature.bbox[2] - feature.bbox[0]) / 2,
-                        feature.bbox[1] + (feature.bbox[3] - feature.bbox[1]) / 2
-                    ];
+            try {
+                const response = await fetch(`${API_URL}/geocode/search?query=${encodeURIComponent(config.query)}`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`
+                    }
+                });
+
+                if (!response.ok) {
+                    console.error("Backend geocoding error:", response.status);
+                    return { features };
+                }
+
+                const data = await response.json();
+
+                for (const cityData of data.cities) {
+                    const center = [cityData.longitude, cityData.latitude];
 
                     const point = {
                         type: "Feature",
@@ -26,12 +34,13 @@ export function initializeCitySearch() {
                             type: "Point",
                             coordinates: center
                         },
-                        place_name: feature.properties.display_name,
-                        properties: feature.properties,
-                        text: feature.properties.display_name,
+                        place_name: cityData.displayName,
+                        properties: cityData,
+                        text: cityData.displayName,
                         place_type: ["place"],
                         center
                     };
+
                     features.push(point);
                 }
             } catch (e) {
@@ -44,11 +53,10 @@ export function initializeCitySearch() {
 
     geocoder = new MaplibreGeocoder(geocoderApi, {
         maplibregl: maplibregl,
-        placeholder: "Search for a city...",
+        placeholder: "Add a city...",
         marker: false,
         showResultsWhileTyping: true,
-        countries: "",
-        types: "place,city,town,village"
+        countries: ""
     });
 
     const searchContainer = document.getElementById("searchbox");
@@ -70,8 +78,7 @@ export function initializeCitySearch() {
 
 function handleCitySelection(result) {
     const coordinates = result.center;
-    const properties = result.properties;
-    const address = properties.address || {};
+    const cityData = result.properties;
 
     if (searchMarker) {
         searchMarker.remove();
@@ -84,22 +91,6 @@ function handleCitySelection(result) {
         zoom: 12,
         duration: 2000
     });
-
-    const displayParts = properties.display_name.split(",").map((s) => s.trim());
-    const region = displayParts[1] || address.state || address.region || null;
-
-    const cityData = {
-        name: properties.name || displayParts[0],
-        latitude: coordinates[1],
-        longitude: coordinates[0],
-        country: address.country || displayParts[displayParts.length - 1] || "Unknown",
-        region: region,
-        state: address.state || null,
-        displayName: properties.display_name,
-        type: properties.type || "place",
-        osm_id: properties.osm_id,
-        importance: properties.importance
-    };
 
     console.log("Selected city with extracted data:", cityData);
 
@@ -117,6 +108,7 @@ export function removeCitySearch() {
         geocoder.onRemove();
         geocoder = null;
     }
+
     if (searchMarker) {
         searchMarker.remove();
         searchMarker = null;

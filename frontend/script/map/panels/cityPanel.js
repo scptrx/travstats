@@ -1,4 +1,3 @@
-// import addCityVisit from "../visits/cityVisitManager.js";
 import { updateVisit, deleteVisit } from "../visits/visitManager.js";
 
 const panel = document.getElementById("city-panel");
