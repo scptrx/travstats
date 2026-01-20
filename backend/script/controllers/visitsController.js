@@ -112,19 +112,21 @@ class VisitsController {
 
             const user = await User.getUserByToken(token);
 
-            const country = await Country.getByName(country_name);
-            if (!country) {
-                return res.status(404).json({ error: "Country not found" });
-            }
+            let country = null;
 
-            const countryVisitExists = await Visit.checkExists(user.id, country.id);
+            if (country_name) {
+                country = await Country.getByName(country_name);
 
-            if (!countryVisitExists) {
-                await Visit.create(user.id, country.id, visit_date, "Auto added from city visit");
+                if (country) {
+                    const countryVisitExists = await Visit.checkExists(user.id, country.id);
+                    if (!countryVisitExists) {
+                        await Visit.create(user.id, country.id, visit_date, "Auto added from city visit");
+                    }
+                }
             }
 
             const city = await City.getOrCreate(city_name, {
-                country_id: country.id,
+                country_id: country?.id ?? null,
                 latitude: city_latitude,
                 longitude: city_longitude
             });
@@ -137,7 +139,7 @@ class VisitsController {
                 });
             }
 
-            const visit = await Visit.create(user.id, country.id, visit_date, notes, null, city.id);
+            const visit = await Visit.create(user.id, country?.id ?? null, visit_date, notes, null, city.id);
 
             res.json({ visit });
         } catch (error) {

@@ -246,7 +246,10 @@
 
 .info-item:last-child {
     border-bottom: none;
-    padding-bottom: 0;
+}
+
+.info-item:only-of-type {
+    padding: 0;
 }
 
 .info-label {

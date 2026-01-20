@@ -41,10 +41,13 @@ export function openCityPanel(cityData, existingVisit, onUpdate) {
     resetButtonsToDefaults();
 
     cityNameEl.textContent = cityData.name;
-    console.log("Setting country to:", cityData.country);
-    cityCountryEl.textContent = cityData.country_name || cityData.country;
 
-    console.log("Setting coordinates:", cityData.latitude, cityData.longitude);
+    const countryText = cityData.country_name || cityData.country;
+    cityCountryEl.textContent = countryText;
+    cityCountryEl.closest(".info-item").style.display = countryText ? "flex" : "none";
+    // if (!countryText) cityCoordinatesEl.closest(".info-item").style.padding = "0";
+    // else cityCoordinatesEl.closest(".info-item").style.padding = "0.5rem 0";
+
     cityCoordinatesEl.textContent = `${cityData.latitude.toFixed(4)}°, ${cityData.longitude.toFixed(4)}°`;
 
     const isVisited = !!existingVisit;
