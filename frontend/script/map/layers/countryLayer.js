@@ -1,5 +1,5 @@
-import { map } from "../mapConfig.js";
-import { loadVisitedCountries } from "../visitManager.js";
+import { map } from "../core/mapConfig.js";
+import { loadVisitedCountries } from "../visits/countryVisitManager.js";
 import { openCountryPanel } from "../panels/countryPanel.js";
 
 let visitedCountriesCache = [];

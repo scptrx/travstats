@@ -13,4 +13,5 @@ async function checkUserStatus() {
         return;
     }
 }
+
 document.addEventListener("DOMContentLoaded", checkUserStatus);

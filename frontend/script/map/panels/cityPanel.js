@@ -1,4 +1,5 @@
-import { addCityVisit, updateVisit, deleteVisit } from "../visitManager.js";
+// import addCityVisit from "../visits/cityVisitManager.js";
+import { updateVisit, deleteVisit } from "../visits/visitManager.js";
 
 const panel = document.getElementById("city-panel");
 const cityNameEl = document.getElementById("city-name");

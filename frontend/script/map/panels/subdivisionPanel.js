@@ -1,4 +1,5 @@
-import { addSubdivisionVisit, updateVisit, deleteVisit } from "../visitManager.js";
+import { addSubdivisionVisit } from "../visits/subdivisionVisitManager.js";
+import { updateVisit, deleteVisit } from "../visits/visitManager.js";
 import { deleteSubdivisionLayers } from "../layers/subdivisionLayer.js";
 import { addCountryLayers, loadAndHighlightVisitedCountries } from "../layers/countryLayer.js";
 import { clearSelectedSubdivision } from "../layers/subdivisionLayer.js";

@@ -1,6 +1,6 @@
-import { map } from "../mapConfig.js";
-import { loadVisitedCities } from "../visitManager.js";
-// import { openCityPanel } from "../cityPanel.js";
+import { map } from "../core/mapConfig.js";
+import { loadVisitedCities } from "../visits/cityVisitManager.js";
+import { openCityPanel } from "../panels/cityPanel.js";
 
 let visitedCitiesCache = [];
 let cityMarkers = [];

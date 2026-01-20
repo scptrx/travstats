@@ -1,4 +1,5 @@
-import { addCountryVisit, updateVisit, deleteVisit } from "../visitManager.js";
+import { addCountryVisit } from "../visits/countryVisitManager.js";
+import { updateVisit, deleteVisit } from "../visits/visitManager.js";
 import { clearSelectedCountry } from "../layers/countryLayer.js";
 import { renderSubdivisionLayers } from "../layers/subdivisionLayer.js";
 

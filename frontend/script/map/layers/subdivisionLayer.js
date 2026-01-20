@@ -1,5 +1,5 @@
-import { map } from "../mapConfig.js";
-import { loadVisitedSubdivisions } from "../visitManager.js";
+import { map } from "../core/mapConfig.js";
+import { loadVisitedSubdivisions } from "../visits/subdivisionVisitManager.js";
 import { deleteCountryLayers } from "./countryLayer.js";
 import { openSubdivisionPanel } from "../panels/subdivisionPanel.js";
 

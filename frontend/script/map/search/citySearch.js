@@ -1,6 +1,6 @@
-import { map } from "./mapConfig.js";
-import { openCityPanel } from "./panels/cityPanel.js";
-import { loadAndDisplayVisitedCities } from "./layers/cityLayer.js";
+import { map } from "../core/mapConfig.js";
+import { openCityPanel } from "../panels/cityPanel.js";
+import { loadAndDisplayVisitedCities } from "../layers/cityLayer.js";
 
 let geocoder = null;
 let searchMarker = null;

@@ -1,6 +1,6 @@
 const API_URL = "http://localhost:3000";
 
-import { loadVisitedCountries } from "../map/visitManager.js";
+import { loadVisitedCountries } from "../map/visits/countryVisitManager.js";
 import { requireAuth } from "../auth/utils/auth.js";
 
 async function displayUserProfile() {
