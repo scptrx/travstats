@@ -32,7 +32,6 @@ export function initializeCitySearch() {
 
                 const marker = new maplibregl.Marker({ color: "#ff8f1e" }).setLngLat(center).addTo(map);
                 const el = marker.getElement();
-                // el.style.pointerEvents = "auto";
                 el.style.zIndex = "10";
 
                 marker.getElement().addEventListener("click", () => {
