@@ -1,5 +1,4 @@
 import { addCountryLayers, loadAndHighlightVisitedCountries } from "../layers/countryLayer.js";
-// import { applyMapMode } from "../mapModeController.js";
 import { initializeCitySearch } from "../search/citySearch.js";
 
 export const MAPTILER_API_KEY = "LHHpvjCDKVfuiPq4D8wa";

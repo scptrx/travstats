@@ -1,6 +1,8 @@
-import { addCountryLayers, deleteCountryLayers } from "./layers/countryLayer.js";
+import { addCountryLayers, deleteCountryLayers } from "../layers/countryLayer.js";
 import { deleteSubdivisionLayers } from "./layers/subdivisionLayer.js";
-import { clearCityMarkers, loadAndDisplayVisitedCities } from "../layers/cityLayer.js";
+import { deleteCountryLayers } from "../layers/countryLayer.js";
+import { loadVisitedCities, deleteCountryLayers } from "../visits/cityVisitManager.js";
+import { deleteSubdivisionLayers } from "../layers/subdivisionLayer.js";
 
 const MAP_MODE_KEY = "mapMode";
 
@@ -13,15 +15,14 @@ export function setMapMode(mode) {
 }
 
 export function applyMapMode(mode) {
-    // deleteCountryLayers();
-    // deleteSubdivisionLayers();
-    // clearCityMarkers();
+    deleteCountryLayers();
+    deleteSubdivisionLayers();
+    clearCityMarkers();
 
     if (mode === "countries") {
-        // addCountryLayers();
+        addCountryLayers();
     }
 
-    if (mode === "subdivisions") {
-        // loadAndDisplayVisitedCities();
+    if (mode === "cities") {
     }
 }
