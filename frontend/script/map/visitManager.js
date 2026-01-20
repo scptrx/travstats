@@ -209,3 +209,25 @@ export async function loadVisitedSubdivisions(countryIsoCode) {
         return [];
     }
 }
+
+// NEW
+
+// export async function loadVisitedCities() {
+//     const response = await fetch("/api/cities/visited");
+//     return await response.json();
+// }
+
+// export async function addCityVisit(cityData, visitDate) {
+//     const response = await fetch("/api/cities/visit", {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({
+//             name: cityData.name,
+//             latitude: cityData.latitude,
+//             longitude: cityData.longitude,
+//             country: cityData.country,
+//             visit_date: visitDate
+//         })
+//     });
+//     return await response.json();
+// }

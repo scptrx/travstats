@@ -9,9 +9,14 @@
     <link rel="stylesheet" href="style/gui.css">
     <link rel="stylesheet" href="style/map.css">
     <link rel="stylesheet" href="style/panel.css">
+    <link rel="stylesheet" href="style/searchbox.css">
 
     <script src="https://unpkg.com/maplibre-gl@^5.13.0/dist/maplibre-gl.js"></script>
     <link href="https://unpkg.com/maplibre-gl@^5.13.0/dist/maplibre-gl.css" rel="stylesheet" />
+
+    <script src="https://unpkg.com/@maplibre/maplibre-gl-geocoder@1.5.0/dist/maplibre-gl-geocoder.min.js"></script>
+    <link rel="stylesheet"
+        href="https://unpkg.com/@maplibre/maplibre-gl-geocoder@1.5.0/dist/maplibre-gl-geocoder.css" />
 </head>
 
 <body>
@@ -23,10 +28,7 @@
         </div>
 
         <div>
-            <div id="searchbox">
-                <input type="text" id="searchInput" placeholder="Find a city...">
-                <div id="suggestions"></div>
-            </div>
+            <div id="searchbox"></div>
         </div>
 
         <div>
@@ -100,6 +102,50 @@
                     Update Visit Date
                 </button>
                 <button id="subdivision-delete-btn" class="action-btn danger-btn" style="display: none;">
+                    Remove from Visited
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel" id="city-panel" style="display: none;">
+        <div class="panel-header">
+            <h2 id="city-name">City Name</h2>
+            <button id="city-panel-close-btn" class="close-btn">×</button>
+        </div>
+        <div class="panel-content">
+            <div class="city-info">
+                <div class="info-item">
+                    <span class="info-label">Country:</span>
+                    <span id="city-country">Unknown</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Region:</span>
+                    <span id="city-region">Unknown</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Type:</span>
+                    <span id="city-type">City</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Coordinates:</span>
+                    <span id="city-coordinates">0.0000, 0.0000</span>
+                </div>
+            </div>
+
+            <div class="date-input-group">
+                <label for="city-visit-date-input" id="city-date-label">When did you visit?</label>
+                <input type="date" id="city-visit-date-input" max="" />
+            </div>
+
+            <div class="panel-actions">
+                <button id="city-add-btn" class="action-btn primary-btn" style="display: none;">
+                    Mark as Visited
+                </button>
+                <button id="city-update-btn" class="action-btn primary-btn" style="display: none;">
+                    Update Visit Date
+                </button>
+                <button id="city-delete-btn" class="action-btn danger-btn" style="display: none;">
                     Remove from Visited
                 </button>
             </div>

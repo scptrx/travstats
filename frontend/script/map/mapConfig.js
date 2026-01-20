@@ -1,4 +1,5 @@
-import { addCountryLayers, loadAndHighlightVisitedCountries } from "./layers/countryLayers.js";
+import { addCountryLayers, loadAndHighlightVisitedCountries } from "./layers/countryLayer.js";
+import { initializeCitySearch } from "./citySearch.js";
 
 export const MAPTILER_API_KEY = "LHHpvjCDKVfuiPq4D8wa";
 export const MAP_STYLE = "https://api.maptiler.com/maps/019adaf0-d3f6-7618-98a2-99ef9942c4d8/style.json?key=" + MAPTILER_API_KEY;
@@ -14,4 +15,5 @@ map.dragRotate.disable();
 map.on("load", () => {
     addCountryLayers();
     loadAndHighlightVisitedCountries();
+    initializeCitySearch();
 });

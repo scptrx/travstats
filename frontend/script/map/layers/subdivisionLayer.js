@@ -1,6 +1,6 @@
 import { map } from "../mapConfig.js";
 import { loadVisitedSubdivisions } from "../visitManager.js";
-import { deleteCountryLayers } from "./countryLayers.js";
+import { deleteCountryLayers } from "./countryLayer.js";
 import { openSubdivisionPanel } from "../panels/subdivisionPanel.js";
 
 let visitedSubdivisionsCache = [];

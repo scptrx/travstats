@@ -1,19 +1,19 @@
-import { addCountryVisit, updateVisit, deleteVisit } from "../visitManager.js";
-import { clearSelectedCountry } from "../layers/countryLayer.js";
-import { renderSubdivisionLayers } from "../layers/subdivisionLayer.js";
+import { addCityVisit, updateVisit, deleteVisit } from "../visitManager.js";
 
-const panel = document.getElementById("country-panel");
-const countryNameEl = document.getElementById("country-name");
-const countryRegionEl = document.getElementById("country-region");
-const visitDateInput = document.getElementById("visit-date-input");
-const dateLabel = document.getElementById("date-label");
-const addBtn = document.getElementById("add-btn");
-const updateBtn = document.getElementById("update-btn");
-const subdivisionsBtn = document.getElementById("subdivisions-btn");
-const deleteBtn = document.getElementById("delete-btn");
-const closeBtn = document.getElementById("panel-close-btn");
+const panel = document.getElementById("city-panel");
+const cityNameEl = document.getElementById("city-name");
+const cityCountryEl = document.getElementById("city-country");
+const cityRegionEl = document.getElementById("city-region");
+const cityTypeEl = document.getElementById("city-type");
+const cityCoordinatesEl = document.getElementById("city-coordinates");
+const visitDateInput = document.getElementById("city-visit-date-input");
+const dateLabel = document.getElementById("city-date-label");
+const addBtn = document.getElementById("city-add-btn");
+const updateBtn = document.getElementById("city-update-btn");
+const deleteBtn = document.getElementById("city-delete-btn");
+const closeBtn = document.getElementById("city-panel-close-btn");
 
-let currentCountryData = null;
+let currentCityData = null;
 let currentExistingVisit = null;
 let currentOnUpdate = null;
 
@@ -32,20 +32,43 @@ function resetButtonsToDefaults() {
     deleteBtn.textContent = REMOVE_TEXT;
 }
 
-export function openCountryPanel(countryData, existingVisit, onUpdate) {
-    currentCountryData = countryData;
+function getCityTypeLabel(type) {
+    const types = {
+        city: "City",
+        town: "Town",
+        village: "Village",
+        hamlet: "Hamlet",
+        suburb: "Suburb",
+        neighbourhood: "Neighbourhood",
+        administrative: "Administrative",
+        locality: "Locality"
+    };
+    return types[type] || "Place";
+}
+
+export function openCityPanel(cityData, existingVisit, onUpdate) {
+    console.log("openCityPanel called with:", cityData);
+
+    currentCityData = cityData;
     currentExistingVisit = existingVisit;
     currentOnUpdate = onUpdate;
 
     resetButtonsToDefaults();
 
-    countryNameEl.textContent = countryData.name;
-    countryRegionEl.textContent = countryData.region || "Unknown region";
+    cityNameEl.textContent = cityData.name;
+    console.log("Setting country to:", cityData.country);
+    cityCountryEl.textContent = cityData.country || "Unknown";
+
+    console.log("Setting region to:", cityData.region);
+    cityRegionEl.textContent = cityData.region || cityData.state || "Unknown";
+
+    console.log("Setting type to:", cityData.type);
+    cityTypeEl.textContent = getCityTypeLabel(cityData.type);
+
+    console.log("Setting coordinates:", cityData.latitude, cityData.longitude);
+    cityCoordinatesEl.textContent = `${cityData.latitude.toFixed(4)}°, ${cityData.longitude.toFixed(4)}°`;
 
     const isVisited = !!existingVisit;
-    console.log("existingVisit:", existingVisit);
-    console.log("countryData:", countryData);
-    console.log("isVisited:", isVisited);
 
     if (isVisited) {
         visitDateInput.value = existingVisit.visit_date.split("T")[0];
@@ -53,11 +76,11 @@ export function openCountryPanel(countryData, existingVisit, onUpdate) {
 
         addBtn.style.display = "none";
         updateBtn.style.display = "none";
+
         const revealUpdate = () => (updateBtn.style.display = "block");
         visitDateInput.addEventListener("input", revealUpdate, { once: true });
         visitDateInput.addEventListener("pointerdown", revealUpdate, { once: true });
 
-        subdivisionsBtn.style.display = "block";
         deleteBtn.style.display = "block";
     } else {
         visitDateInput.value = new Date().toISOString().split("T")[0];
@@ -66,52 +89,43 @@ export function openCountryPanel(countryData, existingVisit, onUpdate) {
         addBtn.style.display = "block";
         updateBtn.style.display = "none";
         deleteBtn.style.display = "none";
-        subdivisionsBtn.style.display = "none";
     }
 
     panel.style.display = "block";
     panel.classList.remove("closing");
 }
 
-export function closeCountryPanel() {
-    clearSelectedCountry();
+export function closeCityPanel() {
     panel.classList.add("closing");
     setTimeout(() => {
         panel.style.display = "none";
         panel.classList.remove("closing");
-        currentCountryData = null;
+        currentCityData = null;
         currentExistingVisit = null;
         currentOnUpdate = null;
         resetButtonsToDefaults();
     }, 300);
 }
 
-closeBtn.addEventListener("click", closeCountryPanel);
+closeBtn.addEventListener("click", closeCityPanel);
 
 document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && panel.style.display !== "none") {
-        closeCountryPanel();
-    }
-});
-
-subdivisionsBtn.addEventListener("click", () => {
-    closeCountryPanel();
-    if (currentCountryData) {
-        renderSubdivisionLayers(currentCountryData.code);
+        closeCityPanel();
     }
 });
 
 addBtn.addEventListener("click", async () => {
-    if (!currentCountryData) return;
+    if (!currentCityData) return;
 
     const visitDate = visitDateInput.value;
     addBtn.disabled = true;
     addBtn.textContent = "Adding...";
 
-    const visit = await addCountryVisit(currentCountryData.code, currentCountryData, visitDate);
+    const visit = await addCityVisit(currentCityData, visitDate);
 
     if (visit) {
-        closeCountryPanel();
+        closeCityPanel();
         if (currentOnUpdate) currentOnUpdate();
     } else {
         addBtn.disabled = false;
@@ -129,7 +143,7 @@ updateBtn.addEventListener("click", async () => {
     const success = await updateVisit(currentExistingVisit.id, newDate);
 
     if (success) {
-        closeCountryPanel();
+        closeCityPanel();
         if (currentOnUpdate) currentOnUpdate();
     } else {
         updateBtn.disabled = false;
@@ -138,18 +152,19 @@ updateBtn.addEventListener("click", async () => {
 });
 
 deleteBtn.addEventListener("click", async () => {
-    if (!currentExistingVisit || !currentCountryData) return;
+    if (!currentExistingVisit || !currentCityData) return;
 
-    if (!confirm(`Remove ${currentCountryData.name} from visited countries?`)) {
+    if (!confirm(`Remove ${currentCityData.name} from visited cities?`)) {
         return;
     }
+
     deleteBtn.disabled = true;
     deleteBtn.textContent = "Removing...";
 
     const success = await deleteVisit(currentExistingVisit.id);
 
     if (success) {
-        closeCountryPanel();
+        closeCityPanel();
         if (currentOnUpdate) currentOnUpdate();
     } else {
         deleteBtn.disabled = false;

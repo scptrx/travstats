@@ -1,7 +1,7 @@
 import { addSubdivisionVisit, updateVisit, deleteVisit } from "../visitManager.js";
-import { deleteSubdivisionLayers } from "../layers/subdivisionLayers.js";
-import { addCountryLayers, loadAndHighlightVisitedCountries } from "../layers/countryLayers.js";
-import { clearSelectedSubdivision } from "../layers/subdivisionLayers.js";
+import { deleteSubdivisionLayers } from "../layers/subdivisionLayer.js";
+import { addCountryLayers, loadAndHighlightVisitedCountries } from "../layers/countryLayer.js";
+import { clearSelectedSubdivision } from "../layers/subdivisionLayer.js";
 
 const panel = document.getElementById("subdivision-panel");
 const subdivisionNameEl = document.getElementById("subdivision-name");

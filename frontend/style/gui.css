@@ -76,37 +76,6 @@
   /* animation: slideUp 0.5s ease 0.4s both; */
 }
 
-#searchbox {
-  display: block;
-  width: 100%;
-  max-width: 500px;
-  margin: 0;
-  position: relative;
-}
-
-#searchInput {
-  width: 100%;
-  padding: 0.75rem 1.5rem;
-  border: none;
-  outline: none;
-  border-radius: 50px;
-  font-size: 0.95rem;
-  background: var(--glass-bg);
-  backdrop-filter: blur(20px);
-  box-shadow: var(--glass-shadow);
-  transition: var(--transition);
-  color: #333;
-}
-
-#searchInput::placeholder {
-  color: #999;
-}
-
-#searchInput:focus {
-  box-shadow: var(--glass-shadow-hover);
-  transform: translateY(-2px);
-}
-
 #buttons-row {
   display: flex;
   justify-content: center;
