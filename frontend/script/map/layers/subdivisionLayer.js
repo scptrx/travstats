@@ -21,13 +21,8 @@ export function renderSubdivisionLayers(countryIsoCode) {
 async function loadAndHighlightVisitedSubdivisions(countryIsoCode) {
     visitedSubdivisionsCache = await loadVisitedSubdivisions(countryIsoCode);
 
-    console.log("visitedSubdivisionsCache:", visitedSubdivisionsCache);
-
     if (visitedSubdivisionsCache.length > 0) {
         const visitedCodes = visitedSubdivisionsCache.filter((v) => v.subdivisions).map((v) => v.subdivisions.code);
-
-        console.log("visitedCodes:", visitedCodes);
-
         if (visitedCodes.length > 0) map.setFilter("highlight-subdivision", ["in", "GID_1", ...visitedCodes]);
     } else {
         map.setFilter("highlight-subdivision", ["in", "GID_1", ""]);

@@ -64,15 +64,5 @@ class Subdivision {
 
         return data;
     }
-
-    // static async getAll() {
-    //     const { data, error } = await supabase.from("subdivisions").select("*");
-
-    //     if (error) {
-    //         throw new Error(`Failed to fetch subdivisions: ${error.message}`);
-    //     }
-
-    //     return data;
-    // }
 }
 export default Subdivision;

@@ -44,11 +44,7 @@ export function openSubdivisionPanel(subdivisionData, existingVisit, onUpdate) {
     subdivisionNameEl.textContent = subdivisionData.name;
     subdivisionCountryEl.textContent = subdivisionData.type || "Subdivision";
 
-    console.log("existingVisit:", existingVisit);
-    console.log("subdivisionData:", subdivisionData);
-
     const isVisited = !!existingVisit;
-    console.log("isVisited:", isVisited);
 
     if (isVisited) {
         subdivisionVisitDateInput.value = existingVisit.visit_date.split("T")[0];

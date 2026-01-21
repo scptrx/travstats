@@ -5,7 +5,6 @@ import { adminAuth } from "../middlewares/adminAuth.js";
 import AdminController from "../controllers/adminController.js";
 
 const router = express.Router();
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 

@@ -6,7 +6,6 @@ let visitedCountriesCache = [];
 
 export async function loadAndHighlightVisitedCountries() {
     visitedCountriesCache = await loadVisitedCountries();
-    console.log("visitedCountriesCache:", visitedCountriesCache);
 
     if (visitedCountriesCache.length > 0) {
         const visitedIsoCodes = visitedCountriesCache.map((v) => v.countries.iso_code);

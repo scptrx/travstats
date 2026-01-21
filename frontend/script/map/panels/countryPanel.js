@@ -44,9 +44,6 @@ export function openCountryPanel(countryData, existingVisit, onUpdate) {
     countryRegionEl.textContent = countryData.region || "Unknown region";
 
     const isVisited = !!existingVisit;
-    console.log("existingVisit:", existingVisit);
-    console.log("countryData:", countryData);
-    console.log("isVisited:", isVisited);
 
     if (isVisited) {
         visitDateInput.value = existingVisit.visit_date.split("T")[0];

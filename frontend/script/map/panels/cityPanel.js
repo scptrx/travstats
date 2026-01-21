@@ -32,8 +32,6 @@ function resetButtonsToDefaults() {
 }
 
 export function openCityPanel(cityData, existingVisit, onUpdate) {
-    console.log("openCityPanel called with:", cityData);
-
     currentCityData = cityData;
     currentExistingVisit = existingVisit;
     currentOnUpdate = onUpdate;

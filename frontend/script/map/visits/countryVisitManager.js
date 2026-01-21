@@ -27,18 +27,14 @@ export async function addCountryVisit(countryIsoCode, countryData, visitDate) {
         const data = await res.json();
 
         if (res.ok) {
-            console.log("Country added:", countryData.name);
             return data.visit;
         } else if (res.status === 409) {
-            console.log("Already visited:", countryData.name);
             return null;
         } else {
-            console.error("Error:", data.error);
             alert(`Failed to add ${countryData.name}: ${data.error}`);
             return null;
         }
     } catch (error) {
-        console.error("Request error:", error);
         alert("Failed to connect to server");
         return null;
     }

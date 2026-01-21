@@ -28,10 +28,8 @@ export async function addCityVisit(cityData, visitDate) {
         const data = await res.json();
 
         if (res.ok) {
-            console.log("City added:", cityData.name);
             return data.visit;
         } else if (res.status === 409) {
-            console.log("Already visited:", cityData.name);
             return null;
         } else {
             console.error("Error:", data.error);
@@ -39,7 +37,6 @@ export async function addCityVisit(cityData, visitDate) {
             return null;
         }
     } catch (error) {
-        console.error("Request error:", error);
         alert("Failed to connect to server");
         return null;
     }

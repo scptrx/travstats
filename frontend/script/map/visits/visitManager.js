@@ -22,15 +22,12 @@ export async function updateVisit(visitId, visitDate) {
         const data = await res.json();
 
         if (res.ok) {
-            console.log("Visit updated");
             return true;
         } else {
-            console.error("Error:", data.error);
             alert(`Failed to update visit: ${data.error}`);
             return false;
         }
     } catch (error) {
-        console.error("Request error:", error);
         alert("Failed to connect to server");
         return false;
     }
@@ -52,7 +49,6 @@ export async function deleteVisit(visitId) {
         });
 
         if (res.ok) {
-            console.log("Visit deleted");
             return true;
         } else {
             const data = await res.json();

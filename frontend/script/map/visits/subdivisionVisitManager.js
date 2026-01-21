@@ -32,19 +32,15 @@ export async function addSubdivisionVisit(subdivisionData, visitDate) {
         const data = await res.json();
 
         if (res.ok) {
-            console.log("Subdivision added:", subdivisionData.name);
             return data.visit;
         } else if (res.status === 409) {
-            console.log("Already visited:", subdivisionData.name);
             alert(`${subdivisionData.name} is already in your visited list!`);
             return null;
         } else {
-            console.error("Error:", data.error);
             alert(`Failed to add ${subdivisionData.name}: ${data.error}`);
             return null;
         }
     } catch (error) {
-        console.error("Request error:", error);
         alert("Failed to connect to server");
         return null;
     }
