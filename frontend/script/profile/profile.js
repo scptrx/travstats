@@ -92,6 +92,7 @@ async function changeProfilePic(token) {
 
 function signOut() {
     localStorage.clear();
+    sessionStorage.clear();
     window.location.href = "sign-in.html";
 }
 
@@ -149,9 +150,7 @@ function renderCityStats(stats) {
         citiesCountElem.textContent = stats.totalCities;
     }
 
-    if (!stats.northernmost) {
-        return;
-    }
+    if (!stats.northernmost) return;
 
     const northernmostElem = document.getElementById("northernmost-city");
     const southernmostElem = document.getElementById("southernmost-city");
@@ -161,15 +160,12 @@ function renderCityStats(stats) {
     if (northernmostElem) {
         northernmostElem.textContent = `${stats.northernmost.cities.name}`;
     }
-
     if (southernmostElem) {
         southernmostElem.textContent = `${stats.southernmost.cities.name}`;
     }
-
     if (easternmostElem) {
         easternmostElem.textContent = `${stats.easternmost.cities.name}`;
     }
-
     if (westernmostElem) {
         westernmostElem.textContent = `${stats.westernmost.cities.name}`;
     }
