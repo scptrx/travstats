@@ -5,7 +5,7 @@
 - JWT based authentication via Supabase (Supabase Auth)
 - Multer (file uploads)
 - Winston (logging)
----
+
 ## Project Structure
 ```
 backend/
@@ -20,33 +20,30 @@ backend/
  ┣ package.json
  ┗ .env
 ```
----
 ## Requirements
 Before installation, make sure you have:
 - Node.js v18 or newer
 - npm
 - A Supabase project
----
+
 ## Installation
 ### Clone the repository
 ```bash
 git clone https://github.com/scptrx/travstats.git
 cd travstats/backend
 ```
----
 ### Install dependencies
 ```bash
 npm install
 ```
----
 ### Environment variables
 Create a `.env` file inside `backend/src/` with the following content:
 ```env
+NODE_ENV=development
 SUPABASE_URL=
 SUPABASE_ANON_PUBLIC_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
 GOOGLE_API_KEY=
-NODE_ENV=development
 PORT=
 ```
 - `SUPABASE_URL`  
@@ -59,7 +56,7 @@ PORT=
     Google API key, used for geocoding
 - `PORT`  
     Server port
----
+
 ## Database Schema
 ### `profiles`
 - `id` uuid, **PK**, **FK → auth.users.id**
@@ -69,7 +66,7 @@ PORT=
 - `role` text
 - `restricted_until` date
 - `created_at` timestamptz
----
+
 ### `countries`
 - `id` integer, **PK**
 - `iso_code` text, UNIQUE
@@ -78,7 +75,7 @@ PORT=
 - `latitude` double precision
 - `longitude` double precision
 - `created_at` timestamptz
----
+
 ### `subdivisions`
 - `id` integer, **PK**
 - `country_id` integer, **FK → countries.id**
@@ -88,7 +85,7 @@ PORT=
 - `latitude` double precision
 - `longitude` double precision
 - `created_at` timestamptz
----
+
 ### `cities`
 - `id` integer, **PK**
 - `country_id` integer, **FK → countries.id**    
@@ -97,7 +94,7 @@ PORT=
 - `latitude` double precision
 - `longitude` double precision
 - `created_at` timestamptz
----
+
 ### `visits`
 - `id` bigint, **PK**
 - `user_id` uuid, **FK → profiles.id**
@@ -108,7 +105,7 @@ PORT=
 - `notes` text
 - `created_at` timestamptz
 - `updated_at` timestamptz
----
+
 ## Database Triggers and Functions
 ### Profile auto creation trigger
 ```sql
@@ -133,7 +130,6 @@ BEGIN
   RETURN NEW;
 END;
 ```
----
 ### Visits cascade delete trigger
 ```sql
 DECLARE
@@ -181,15 +177,12 @@ BEGIN
   RETURN OLD;
 END;
 ```
----
 ## Running the server
 ### Development mode
 ```bash
 npm run dev
 ```
----
 ### Production mode
 ```bash
 npm start
 ```
----
