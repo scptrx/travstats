@@ -45,7 +45,4 @@ process.on("uncaughtException", (error) => {
 
 app.listen(process.env.PORT, () => {
     console.log(`Backend running on http://localhost:${process.env.PORT}`);
-
-    console.log("Supabase URL:", process.env.SUPABASE_URL ? "Loaded" : "Not Loaded");
-    console.log("Supabase Anon Key:", process.env.SUPABASE_ANON_PUBLIC_KEY ? "Loaded" : "Not Loaded");
 });
