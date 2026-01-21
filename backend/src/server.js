@@ -1,14 +1,11 @@
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import authRouter from "./routes/auth.js";
 import profileRouter from "./routes/profile.js";
 import visitsRouter from "./routes/visits.js";
 import geocodingRoutes from "./routes/geocode.js";
 import logger from "./utils/logger.js";
 import { requestLogger } from "./middlewares/requestLogger.js";
-
-dotenv.config();
 
 const app = express();
 
