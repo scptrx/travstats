@@ -3,7 +3,6 @@ import { showError, clearError, setupErrorClearOnInput } from "./utils/ui.js";
 import { checkAuthAndRedirect, login, saveAuth } from "./utils/auth.js";
 
 checkAuthAndRedirect();
-
 setupErrorClearOnInput("email", "password");
 
 document.getElementById("signin-form").addEventListener("submit", async (e) => {
@@ -25,7 +24,12 @@ document.getElementById("signin-form").addEventListener("submit", async (e) => {
 
         if (res.ok) {
             saveAuth(data.session, data.user);
-            window.location.href = "profile.html";
+
+            if (data.redirectTo) {
+                window.location.href = data.redirectTo;
+            } else {
+                window.location.href = "profile.html";
+            }
         } else {
             const errorLower = data.error.toLowerCase();
             if (errorLower.includes("email") || errorLower.includes("user")) {

@@ -2,11 +2,7 @@ import { supabase } from "../supabase.js";
 
 class Profile {
     static async getOrCreate(userId, userEmail, username = null) {
-        let { data: profile, error } = await supabase
-            .from("profiles")
-            .select("*")
-            .eq("id", userId)
-            .single();
+        let { data: profile, error } = await supabase.from("profiles").select("*").eq("id", userId).single();
 
         if (error || !profile) {
             const { data: newProfile } = await supabase
@@ -27,12 +23,7 @@ class Profile {
     }
 
     static async updateUsername(userId, username) {
-        const { data, error } = await supabase
-            .from("profiles")
-            .update({ username })
-            .eq("id", userId)
-            .select()
-            .single();
+        const { data, error } = await supabase.from("profiles").update({ username }).eq("id", userId).select().single();
 
         if (error) {
             throw new Error(error.message);
@@ -42,12 +33,7 @@ class Profile {
     }
 
     static async updateAvatar(userId, avatarUrl) {
-        const { data, error } = await supabase
-            .from("profiles")
-            .update({ profile_picture_url: avatarUrl })
-            .eq("id", userId)
-            .select()
-            .single();
+        const { data, error } = await supabase.from("profiles").update({ profile_picture_url: avatarUrl }).eq("id", userId).select().single();
 
         if (error) {
             throw new Error(error.message);
@@ -57,11 +43,7 @@ class Profile {
     }
 
     static async getById(userId) {
-        const { data, error } = await supabase
-            .from("profiles")
-            .select("*")
-            .eq("id", userId)
-            .single();
+        const { data, error } = await supabase.from("profiles").select("*").eq("id", userId).single();
 
         if (error) {
             throw new Error(error.message);
@@ -71,17 +53,18 @@ class Profile {
     }
 
     static async getUsername(userId) {
-        const { data, error } = await supabase
-            .from("profiles")
-            .select("username")
-            .eq("id", userId)
-            .single();
+        const { data, error } = await supabase.from("profiles").select("username").eq("id", userId).single();
 
         if (error || !data) {
             return null;
         }
 
         return data.username;
+    }
+
+    static async isAdmin(userId) {
+        const profile = await this.getByUserId(userId);
+        return profile?.role === "admin";
     }
 }
 export default Profile;

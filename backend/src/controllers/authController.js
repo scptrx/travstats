@@ -23,17 +23,38 @@ class AuthController {
     static async login(req, res) {
         try {
             const { email, password } = req.body;
-
             const { user, session } = await User.login(email, password);
-
             const profile = await Profile.getOrCreate(user.id, user.email, user.user_metadata?.username);
 
             logger.info("User logged in", {
                 userId: user.id,
-                email: user.email
+                email: user.email,
+                role: profile.role
             });
 
-            res.json({ user, session, profile });
+            res.cookie("auth_token", session.access_token, {
+                httpOnly: true,
+                secure: false,
+                sameSite: "lax",
+                maxAge: 60 * 60 * 1000
+            });
+
+            if (profile.role === "admin") {
+                return res.json({
+                    user,
+                    session,
+                    profile,
+                    isAdmin: true,
+                    redirectTo: `http://localhost:${process.env.PORT}/admin/dashboard?token=${session.access_token}`
+                });
+            }
+
+            res.json({
+                user,
+                session,
+                profile,
+                isAdmin: false
+            });
         } catch (error) {
             res.status(400).json({ error: error.message });
         }
@@ -42,21 +63,24 @@ class AuthController {
     static async check(req, res) {
         try {
             const token = req.headers.authorization?.replace("Bearer ", "");
-
             if (!token) {
                 return res.status(401).json({ error: "No token" });
             }
 
             const user = await User.getUserByToken(token);
-
             const profile = await Profile.getOrCreate(user.id, user.email, user.user_metadata?.username);
 
             logger.info("User checked", {
                 userId: user.id,
-                email: user.email
+                email: user.email,
+                role: profile.role
             });
 
-            res.json({ user, profile });
+            res.json({
+                user,
+                profile,
+                isAdmin: profile.role === "admin"
+            });
         } catch (error) {
             res.status(401).json({ error: error.message });
         }
