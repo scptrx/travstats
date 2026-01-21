@@ -1,7 +1,7 @@
 import Profile from "../models/Profile.js";
 import logger from "../utils/logger.js";
 
-class adminController {
+class AdminController {
     static async getAllProfiles(req, res) {
         try {
             const profiles = await Profile.getAll();
@@ -55,4 +55,4 @@ class adminController {
     }
 }
 
-export default adminController;
+export default AdminController;

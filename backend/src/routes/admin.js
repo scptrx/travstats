@@ -2,7 +2,7 @@ import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 import { adminAuth } from "../middlewares/adminAuth.js";
-import adminController from "../controllers/adminController.js";
+import AdminController from "../controllers/adminController.js";
 
 const router = express.Router();
 
@@ -17,9 +17,9 @@ router.get("/dashboard", (req, res) => {
 });
 
 // GET /admin/profiles
-router.get("/profiles", adminController.getAllProfiles);
+router.get("/profiles", AdminController.getAllProfiles);
 
 // PUT /admin/profiles/:id
-router.put("/profiles/:id", adminController.updateProfile);
+router.put("/profiles/:id", AdminController.updateProfile);
 
 export default router;
