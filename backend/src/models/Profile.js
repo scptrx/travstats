@@ -66,5 +66,67 @@ class Profile {
         const profile = await this.getByUserId(userId);
         return profile?.role === "admin";
     }
+
+    static async getAll() {
+        const { data, error } = await supabase.from("profiles").select("*").order("created_at", { ascending: false });
+
+        if (error) {
+            throw new Error(error.message);
+        }
+        return data;
+    }
+
+    static async updateByAdmin(userId, updates) {
+        const updateData = {};
+
+        if (updates.username !== undefined) {
+            updateData.username = updates.username;
+        }
+        if (updates.role !== undefined) {
+            updateData.role = updates.role;
+        }
+        if (updates.restricted_until !== undefined) {
+            updateData.restricted_until = updates.restricted_until;
+        }
+
+        const { data, error } = await supabase.from("profiles").update(updateData).eq("id", userId).select().single();
+
+        if (error) {
+            throw new Error(error.message);
+        }
+        return data;
+    }
+
+    static async getStats() {
+        const { data: allProfiles, error } = await supabase.from("profiles").select("role, restricted_until");
+
+        if (error) {
+            throw new Error(error.message);
+        }
+
+        const totalUsers = allProfiles.length;
+        const admins = allProfiles.filter((p) => p.role === "admin").length;
+        const restricted = allProfiles.filter((p) => p.restricted_until && new Date(p.restricted_until) > new Date()).length;
+
+        return {
+            totalUsers,
+            admins,
+            regularUsers: totalUsers - admins,
+            restrictedUsers: restricted
+        };
+    }
+
+    static async isRestricted(userId) {
+        const profile = await this.getById(userId);
+
+        if (!profile.restricted_until) {
+            return false;
+        }
+
+        const restrictedDate = new Date(profile.restricted_until);
+        const now = new Date();
+
+        return restrictedDate > now;
+    }
 }
 export default Profile;

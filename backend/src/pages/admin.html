@@ -98,6 +98,11 @@
             background: var(--primary-dark);
         }
 
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
         .save-cell {
             white-space: nowrap;
         }
@@ -106,12 +111,22 @@
             color: #777;
             font-size: 0.85rem;
         }
+
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
     </style>
 </head>
 
 <body>
 
     <h1>Admin Panel</h1>
+
+    <div id="errorContainer"></div>
 
     <div class="table-wrapper">
         <table id="profilesTable">
@@ -126,80 +141,171 @@
                     <th>Save</th>
                 </tr>
             </thead>
-            <tbody></tbody>
+            <tbody>
+                <tr>
+                    <td colspan="7" style="text-align: center;">Loading...</td>
+                </tr>
+            </tbody>
         </table>
     </div>
 
     <script>
         const API_URL = "http://localhost:3000";
 
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
+        function getToken() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('token') || getCookie('auth_token');
+        }
+
+        function showError(message) {
+            const container = document.getElementById('errorContainer');
+            container.innerHTML = `<div class="error">${message}</div>`;
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 5000);
+        }
+
         async function loadProfiles() {
-            const res = await fetch(`${API_URL}/admin/profiles`);
-            const profiles = await res.json();
-            renderTable(profiles);
+            try {
+                const token = getToken();
+                const res = await fetch(`${API_URL}/admin/profiles`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!res.ok) {
+                    throw new Error('Failed to load profiles');
+                }
+
+                const profiles = await res.json();
+                renderTable(profiles);
+            } catch (error) {
+                console.error('Error loading profiles:', error);
+                showError('Failed to load profiles. Please try again.');
+                document.querySelector('#profilesTable tbody').innerHTML =
+                    '<tr><td colspan="7" style="text-align: center; color: #c62828;">Error loading data</td></tr>';
+            }
         }
 
         function renderTable(profiles) {
             const tbody = document.querySelector("#profilesTable tbody");
             tbody.innerHTML = "";
 
+            if (profiles.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">No users found</td></tr>';
+                return;
+            }
+
             profiles.forEach(profile => {
                 const tr = document.createElement("tr");
 
                 tr.innerHTML = `
-        <td>
-          <img class="avatar" src="${profile.profile_picture_url || ''}" />
-        </td>
+                    <td>
+                        <img class="avatar" 
+                             src="${profile.profile_picture_url || ''}" 
+                             onerror="this.style.display='none'" />
+                    </td>
 
-        <td>
-          <input type="text" value="${profile.username}" />
-        </td>
+                    <td>
+                        <input type="text" 
+                               value="${profile.username}" 
+                               data-original="${profile.username}" />
+                    </td>
 
-        <td class="muted">${profile.email}</td>
+                    <td class="muted">${profile.email}</td>
 
-        <td class="muted">
-          ${new Date(profile.created_at).toLocaleDateString()}
-        </td>
+                    <td class="muted">
+                        ${new Date(profile.created_at).toLocaleDateString()}
+                    </td>
 
-        <td>
-          <select>
-            <option value="user" ${profile.role === "user" ? "selected" : ""}>user</option>
-            <option value="admin" ${profile.role === "admin" ? "selected" : ""}>admin</option>
-          </select>
-        </td>
+                    <td>
+                        <select data-original="${profile.role}">
+                            <option value="user" ${profile.role === "user" ? "selected" : ""}>user</option>
+                            <option value="admin" ${profile.role === "admin" ? "selected" : ""}>admin</option>
+                        </select>
+                    </td>
 
-        <td>
-          <input type="date" value="${profile.restricted_until ? profile.restricted_until.split("T")[0] : ""}" />
-        </td>
+                    <td>
+                        <input type="date" 
+                               value="${profile.restricted_until ? profile.restricted_until.split("T")[0] : ""}" 
+                               data-original="${profile.restricted_until ? profile.restricted_until.split("T")[0] : ""}"
+                               min="${new Date().toISOString().split('T')[0]}" />
+                    </td>
 
-        <td class="save-cell">
-          <button>Save</button>
-        </td>
-      `;
-
-                const saveBtn = tr.querySelector("button");
-                saveBtn.onclick = () => saveProfile(profile.id, tr);
+                    <td class="save-cell">
+                        <button onclick="saveProfile('${profile.id}', this.closest('tr'))">Save</button>
+                    </td>
+                `;
 
                 tbody.appendChild(tr);
             });
         }
 
         async function saveProfile(id, row) {
-            const [, usernameInput, , , roleSelect, restrictedInput] = row.children;
+            const usernameInput = row.querySelector('input[type="text"]');
+            const roleSelect = row.querySelector('select');
+            const restrictedInput = row.querySelector('input[type="date"]');
+            const saveBtn = row.querySelector('button');
 
-            const payload = {
-                username: usernameInput.querySelector("input").value,
-                role: roleSelect.querySelector("select").value,
-                restricted_until: restrictedInput.querySelector("input").value || null
-            };
+            const username = usernameInput.value.trim();
+            const role = roleSelect.value;
+            const restricted_until = restrictedInput.value || null;
 
-            await fetch(`${API_URL}/admin/profiles/${id}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            });
+            const hasChanges =
+                username !== usernameInput.dataset.original ||
+                role !== roleSelect.dataset.original ||
+                (restricted_until || '') !== (restrictedInput.dataset.original || '');
 
-            alert("Saved");
+            if (!hasChanges) {
+                alert('No changes to save');
+                return;
+            }
+
+            if (!username) {
+                showError('Username cannot be empty');
+                return;
+            }
+
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Saving...';
+
+            try {
+                const token = getToken();
+                const res = await fetch(`${API_URL}/admin/profiles/${id}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ username, role, restricted_until })
+                });
+
+                if (!res.ok) {
+                    const error = await res.json();
+                    throw new Error(error.error || 'Failed to save');
+                }
+
+                usernameInput.dataset.original = username;
+                roleSelect.dataset.original = role;
+                restrictedInput.dataset.original = restricted_until || '';
+
+                alert("Saved successfully!");
+
+                await loadProfiles();
+            } catch (error) {
+                console.error('Error saving profile:', error);
+                showError(error.message || 'Failed to save changes');
+                saveBtn.textContent = 'Save';
+            } finally {
+                saveBtn.disabled = false;
+            }
         }
 
         loadProfiles();
