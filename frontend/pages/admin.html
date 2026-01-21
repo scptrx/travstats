@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Admin Panel</title>
+
+    <style>
+        :root {
+            --primary-color: #d88328;
+            --primary-dark: #b86d1f;
+            --secondary-color: #f0f0f0;
+            --glass-bg: rgba(255, 255, 255, 0.95);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --glass-shadow-hover: 0 12px 48px rgba(0, 0, 0, 0.15);
+            --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            --font-size: 16px;
+            --border-radius: 16px;
+            --padding: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            padding: 2rem;
+            background: #eee;
+        }
+
+        h1 {
+            margin-bottom: 1.5rem;
+        }
+
+        .table-wrapper {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            padding: 1.5rem;
+            border-radius: 24px;
+            box-shadow: var(--glass-shadow);
+            overflow-x: auto;
+            width: 100%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        th,
+        td {
+            padding: 0.75rem;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        th {
+            font-weight: 700;
+            border-bottom: 2px solid #ddd;
+        }
+
+        tr:not(:last-child) td {
+            border-bottom: 1px solid #eee;
+        }
+
+        img.avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: #ccc;
+        }
+
+        input[type="text"],
+        select,
+        input[type="date"] {
+            padding: 0.4rem 0.6rem;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-family: var(--font-family);
+        }
+
+        button {
+            padding: 0.4rem 0.8rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+        }
+
+        button:hover {
+            background: var(--primary-dark);
+        }
+
+        .save-cell {
+            white-space: nowrap;
+        }
+
+        .muted {
+            color: #777;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Admin Panel</h1>
+
+    <div class="table-wrapper">
+        <table id="profilesTable">
+            <thead>
+                <tr>
+                    <th>Avatar</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Created</th>
+                    <th>Role</th>
+                    <th>Restricted until</th>
+                    <th>Save</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <script>
+        const API_URL = "http://localhost:3000";
+
+        async function loadProfiles() {
+            const res = await fetch(`${API_URL}/admin/profiles`);
+            const profiles = await res.json();
+            renderTable(profiles);
+        }
+
+        function renderTable(profiles) {
+            const tbody = document.querySelector("#profilesTable tbody");
+            tbody.innerHTML = "";
+
+            profiles.forEach(profile => {
+                const tr = document.createElement("tr");
+
+                tr.innerHTML = `
+        <td>
+          <img class="avatar" src="${profile.profile_picture_url || ''}" />
+        </td>
+
+        <td>
+          <input type="text" value="${profile.username}" />
+        </td>
+
+        <td class="muted">${profile.email}</td>
+
+        <td class="muted">
+          ${new Date(profile.created_at).toLocaleDateString()}
+        </td>
+
+        <td>
+          <select>
+            <option value="user" ${profile.role === "user" ? "selected" : ""}>user</option>
+            <option value="admin" ${profile.role === "admin" ? "selected" : ""}>admin</option>
+          </select>
+        </td>
+
+        <td>
+          <input type="date" value="${profile.restricted_until ? profile.restricted_until.split("T")[0] : ""}" />
+        </td>
+
+        <td class="save-cell">
+          <button>Save</button>
+        </td>
+      `;
+
+                const saveBtn = tr.querySelector("button");
+                saveBtn.onclick = () => saveProfile(profile.id, tr);
+
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function saveProfile(id, row) {
+            const [, usernameInput, , , roleSelect, restrictedInput] = row.children;
+
+            const payload = {
+                username: usernameInput.querySelector("input").value,
+                role: roleSelect.querySelector("select").value,
+                restricted_until: restrictedInput.querySelector("input").value || null
+            };
+
+            await fetch(`${API_URL}/admin/profiles/${id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+
+            alert("Saved");
+        }
+
+        loadProfiles();
+    </script>
+
+</body>
+
+</html>
