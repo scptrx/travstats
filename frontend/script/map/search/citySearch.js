@@ -1,7 +1,7 @@
 import { map } from "../core/mapConfig.js";
 import { openCityPanel } from "../panels/cityPanel.js";
 import { loadAndDisplayVisitedCities } from "../layers/cityLayer.js";
-import { API_URL } from "../../api.js";
+import { API_URL } from "../../config/api.js";
 import { applyMapMode } from "../core/mapModeController.js";
 
 let geocoder = null;

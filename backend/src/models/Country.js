@@ -56,15 +56,5 @@ class Country {
 
         return data;
     }
-
-    // static async getAll() {
-    //     const { data, error } = await supabase.from("countries").select("*").order("name");
-
-    //     if (error) {
-    //         throw new Error(error.message);
-    //     }
-
-    //     return data;
-    // }
 }
 export default Country;

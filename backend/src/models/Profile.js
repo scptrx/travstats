@@ -97,25 +97,6 @@ class Profile {
         return data;
     }
 
-    static async getStats() {
-        const { data: allProfiles, error } = await supabase.from("profiles").select("role, restricted_until");
-
-        if (error) {
-            throw new Error(error.message);
-        }
-
-        const totalUsers = allProfiles.length;
-        const admins = allProfiles.filter((p) => p.role === "admin").length;
-        const restricted = allProfiles.filter((p) => p.restricted_until && new Date(p.restricted_until) > new Date()).length;
-
-        return {
-            totalUsers,
-            admins,
-            regularUsers: totalUsers - admins,
-            restrictedUsers: restricted
-        };
-    }
-
     static async isRestricted(userId) {
         const profile = await this.getById(userId);
 

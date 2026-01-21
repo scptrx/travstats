@@ -1,4 +1,4 @@
-import { API_URL } from "../../api.js";
+import { API_URL } from "../../config/api.js";
 
 export async function addCityVisit(cityData, visitDate) {
     const token = localStorage.getItem("accessToken");

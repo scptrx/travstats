@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000";
+import { API_URL } from "../../config/api.js";
 
 // token confirmation and redirect to profile if AUTHENTICATED (for sign-in/sign-up pages)
 export async function checkAuthAndRedirect(redirectUrl = "profile.html") {
@@ -11,6 +11,14 @@ export async function checkAuthAndRedirect(redirectUrl = "profile.html") {
                 Authorization: `Bearer ${token}`
             }
         });
+
+        const data = await res.json();
+
+        if (data.restricted || res.status === 403) {
+            clearAuth();
+            alert(data.error || "Your account has been restricted");
+            return false;
+        }
 
         if (res.ok) {
             window.location.href = redirectUrl;
@@ -40,13 +48,21 @@ export async function requireAuth() {
             }
         });
 
+        const data = await res.json();
+
+        if (data.restricted || res.status === 403) {
+            clearAuth();
+            alert(data.error || "Your account has been restricted");
+            window.location.href = "sign-in.html";
+            return null;
+        }
+
         if (!res.ok) {
             clearAuth();
             window.location.href = "sign-in.html";
             return null;
         }
 
-        const data = await res.json();
         return data;
     } catch (error) {
         console.error("Auth check failed:", error);
@@ -66,6 +82,15 @@ export async function validateToken() {
                 Authorization: `Bearer ${token}`
             }
         });
+
+        const data = await res.json();
+
+        if (data.restricted || res.status === 403) {
+            clearAuth();
+            alert(data.error || "Your account has been restricted");
+            window.location.reload();
+            return false;
+        }
 
         if (!res.ok) {
             clearAuth();
@@ -91,6 +116,7 @@ export function clearAuth() {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("user");
+    sessionStorage.clear();
 }
 
 export function getToken() {
@@ -103,7 +129,6 @@ export async function login(email, password) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
     });
-
     const data = await res.json();
     return { res, data };
 }
@@ -114,7 +139,6 @@ export async function register(email, password, username) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password, username })
     });
-
     const data = await res.json();
     return { res, data };
 }

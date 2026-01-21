@@ -26,6 +26,25 @@ class AuthController {
             const { user, session } = await User.login(email, password);
             const profile = await Profile.getOrCreate(user.id, user.email, user.user_metadata?.username);
 
+            const isRestricted = await Profile.isRestricted(user.id);
+            if (isRestricted) {
+                const restrictedDate = new Date(profile.restricted_until).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric"
+                });
+
+                logger.warn("Restricted user attempted login", {
+                    userId: user.id,
+                    email: user.email,
+                    restrictedUntil: profile.restricted_until
+                });
+
+                return res.status(403).json({
+                    error: `Your account has been restricted until ${restrictedDate}.`
+                });
+            }
+
             logger.info("User logged in", {
                 userId: user.id,
                 email: user.email,
@@ -69,6 +88,26 @@ class AuthController {
 
             const user = await User.getUserByToken(token);
             const profile = await Profile.getOrCreate(user.id, user.email, user.user_metadata?.username);
+
+            const isRestricted = await Profile.isRestricted(user.id);
+            if (isRestricted) {
+                const restrictedDate = new Date(profile.restricted_until).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric"
+                });
+
+                logger.warn("Restricted user session detected", {
+                    userId: user.id,
+                    email: user.email,
+                    restrictedUntil: profile.restricted_until
+                });
+
+                return res.status(403).json({
+                    error: `Your account has been restricted until ${restrictedDate}.`,
+                    restricted: true
+                });
+            }
 
             logger.info("User checked", {
                 userId: user.id,

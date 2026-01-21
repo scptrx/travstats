@@ -1,4 +1,4 @@
-import { API_URL } from "../api.js";
+import { API_URL } from "../config/api.js";
 import { loadVisitedCountries } from "../map/visits/countryVisitManager.js";
 import { requireAuth } from "../auth/utils/auth.js";
 
